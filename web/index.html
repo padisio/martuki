@@ -9,8 +9,8 @@
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css?v=52">
   <link rel="stylesheet" href="android.css?v=52">
-  <link rel="stylesheet" href="story.css?v=52">
-  <link rel="stylesheet" href="menus.css?v=52">
+  <link rel="stylesheet" href="story.css?v=quiet-ui-1">
+  <link rel="stylesheet" href="menus.css?v=quiet-ui-2">
   <link rel="stylesheet" href="web.css?v=1">
   <script type="module" src="web-shell.js?v=1"></script>
   <link rel="stylesheet" href="loading.css?v=1">
@@ -49,33 +49,35 @@
             <p id="overlayText">Entraste como empleada. Descubriste una conspiración. Ahora todo el departamento quiere impedir que salgas.</p>
             <div class="mission-note" id="missionNote">3 oleadas · 1 jefe · cero reuniones</div>
             <button id="play" class="primary" disabled>INICIAR MISIÓN <span>→</span></button>
+            <button id="resumeGame" class="level-select" hidden>RECUPERAR PARTIDA</button>
+            <button id="chooseChapter" class="level-select">ELEGIR CAPÍTULO</button>
+            <button id="returnTitle" class="return-title" hidden>VOLVER A PORTADA</button>
+            <p class="overlay-tip" id="overlayTip">Muévete también arriba y abajo para esquivar.</p>
+            <small class="build-version">v0.18.0</small>
+          </div>
+        </div>
+        <dialog id="chapterSelect" aria-labelledby="chapterSelectTitle">
+          <header><h2 id="chapterSelectTitle">ELEGIR CAPÍTULO</h2><button id="closeChapters" aria-label="Cerrar capítulos">×</button></header>
+          <button id="playOffice" class="level-select">NIVEL 01 · OFICINA</button>
             <button id="playExhibition" class="level-select">NIVEL 02 · EXPOSICIÓN</button>
             <button id="playLaboratory" class="level-select">NIVEL 03 · LABORATORIO</button>
             <button id="playSewers" class="level-select">NIVEL 04 · ALCANTARILLAS</button>
             <button id="playFactory" class="level-select">NIVEL 05 · FÁBRICA</button>
             <button id="playRooftop" class="level-select">NIVEL 06 · AZOTEA</button>
-            <button id="returnTitle" class="return-title" hidden>VOLVER A PORTADA</button>
             <a id="castGallery" class="cast-gallery-link" href="splashes.html">PERSONAJES</a>
-            <p class="overlay-tip" id="overlayTip">Muévete también arriba y abajo para esquivar.</p>
-            <small class="build-version">v0.18.0</small>
-          </div>
-        </div>
+        </dialog>
         <section id="storyUI" class="story-ui" aria-label="Cinemática de la historia" hidden>
           <p id="storyNarration" class="sr-only" aria-live="polite"></p>
           <nav class="story-nav" aria-label="Navegación de la cinemática">
-            <button id="storyPrevious" aria-label="Página anterior">← ANTERIOR</button>
-            <button id="storySkip">SALTAR</button>
-            <button id="storyArt" aria-pressed="false">VER IMAGEN</button>
-            <span id="storyProgress" aria-live="off"></span>
-            <button id="storyNext">SIGUIENTE →</button>
+            <button id="storyPrevious" aria-label="Página anterior"><span aria-hidden="true">‹</span></button>
+            <button id="storyNext" aria-label="Página siguiente"><span aria-hidden="true">›</span></button>
           </nav>
         </section>
         <section id="bossDialogueUI" class="story-ui" aria-label="Conversación con el boss" hidden>
           <p id="bossDialogueText" class="sr-only" aria-live="polite"></p>
           <nav class="story-nav" aria-label="Avanzar conversación">
-            <button id="bossDialoguePrevious">← ANTERIOR</button>
-            <span id="bossDialogueProgress"></span>
-            <button id="bossDialogueNext">SIGUIENTE →</button>
+            <button id="bossDialoguePrevious" aria-label="Diálogo anterior"><span aria-hidden="true">‹</span></button>
+            <button id="bossDialogueNext" aria-label="Diálogo siguiente"><span aria-hidden="true">›</span></button>
           </nav>
         </section>
         <section id="storyGallery" class="story-gallery" aria-label="Galería de capítulos" hidden>
@@ -140,6 +142,6 @@
     <form method="dialog"><button class="primary">VOLVER AL JUEGO</button></form>
   </dialog>
   <p id="webNotice" role="status" hidden></p>
-  <script type="module" src="game.js?v=loading-1"></script>
+  <script type="module" src="game.js?v=quiet-ui-2"></script>
 </body>
 </html>

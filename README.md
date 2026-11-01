@@ -12,6 +12,10 @@ Juego completo con seis niveles, cinemáticas, epílogo, galería de personajes,
 
 La primera carga descarga las ilustraciones y puede tardar. La pantalla de inicio muestra progreso real, archivos preparados, datos recibidos, velocidad media de descarga y recursos recuperados de caché. Si la conexión se detiene, avisa y permite reintentar. La pantalla completa requiere pulsar un botón y depende del navegador.
 
+La portada oculta los niveles bajo **Elegir capítulo**. En las cinemáticas, pulsa la mitad derecha para avanzar y la izquierda para retroceder; también funcionan las flechas del teclado. Los diálogos conservan sus colores por personaje. Las presentaciones muestran los nombres sin etiquetas adicionales y el juego solo anuncia avances y recogidas importantes.
+
+La partida se guarda automáticamente, incluida la página de la cinemática. Al recargar se recupera; el combate vuelve en pausa. Desde la portada también se puede recuperar la última partida. Las imágenes y la música se conservan en la caché del navegador para reutilizarlas al volver. Si se borran los datos del sitio o el navegador elimina su almacenamiento, será necesario descargar los recursos otra vez. No hay sincronización entre dispositivos.
+
 ## Código y recursos completos
 
 El paquete íntegro se distribuye como **Martuki-Web-0.18.0.zip** en la [Release v0.18.0](https://github.com/padisio/martuki/releases/tag/v0.18.0). Contiene `dist/`, el código JavaScript, todos los recursos, instrucciones, servidor local y manifiesto SHA-256. Para jugar localmente: extraer, ejecutar `node server.mjs` y abrir `http://127.0.0.1:4173`.
@@ -33,3 +37,5 @@ Para otra versión, adjuntar el nuevo paquete a su Release y actualizar en el wo
 160 pruebas de lógica aprobadas. Prueba en Edge con escritorio y móvil emulado, rutas bajo `/martuki/`, pantalla completa, teclado, controles táctiles, diálogos y ausencia de errores de carga. Recursos comparados contra la APK: 731 archivos idénticos; únicamente se adaptó la entrada web y el control de fullscreen, con tres archivos web añadidos.
 
 La mejora de carga añade 11 pruebas (`npm test`) para progreso, concurrencia, caché, velocidad, errores y bloqueos. Verificada en Brave con descarga ralentizada hasta completar los 486 recursos, y con un error HTTP forzado y reintento. Se cargan hasta seis imágenes en paralelo; el porcentaje llega al 100 % cuando el juego está preparado.
+
+La actualización de interfaz y continuidad añade otras 11 pruebas sobre ausencia de spoilers, diálogos, recogidas, escala de la zombi rubia, restauración de partida y caché persistente. El workflow las ejecuta sobre el juego montado en `site/dist/`. En el proyecto principal pasan 182 pruebas. En Brave se ha comprobado la navegación izquierda/derecha, la recuperación de la misma página tras recargar, la recuperación del combate en pausa y una segunda carga con 486 recursos desde caché y 0 KB descargados. Estas comprobaciones de recarga reproducen la pérdida de memoria de la página; no equivalen a una prueba en un teléfono físico.

@@ -1,3 +1,4 @@
+import {assetFetch} from './asset-cache.js?v=1';
 // Real image transfer + decoding progress. Shared by the browser and offline APK.
 export function formatBytes(bytes){
  if(bytes<1e6)return `${(bytes/1e3).toFixed(0)} KB`;
@@ -8,7 +9,7 @@ async function decodeBlob(blob){
  try{image.src=url;await image.decode();return image;}finally{URL.revokeObjectURL(url);}
 }
 export class AssetLoader{
- constructor(urls,{fetcher=(...args)=>fetch(...args),decode=decodeBlob,now=()=>performance.now(),timing=url=>performance.getEntriesByName(url).at(-1),baseURL='http://localhost/',local=false,idleMs=45000}={}){
+ constructor(urls,{fetcher=assetFetch,decode=decodeBlob,now=()=>performance.now(),timing=url=>performance.getEntriesByName(url).at(-1),baseURL='http://localhost/',local=false,idleMs=45000}={}){
   this.fetcher=fetcher;this.decode=decode;this.now=now;this.timing=timing;this.baseURL=baseURL;this.local=local;this.idleMs=idleMs;
   this.entries=new Map([...new Set(urls)].map(url=>[url,{url,bytes:0,total:0,state:'queued',source:null,image:null}]));
   this.started=this.lastActivity=now();this.finished=false;this.error=null;this.controller=new AbortController();
@@ -46,7 +47,7 @@ export class AssetLoader{
    clearTimeout(timeout);
    const resource=this.timing(new URL(entry.url,this.baseURL).href);
    if(this.local)entry.source='local';
-   else if(resource?.transferSize===0&&resource.decodedBodySize>0)entry.source='cache';
+   else if(response.headers.get('X-Martuki-Cache')==='disk'||resource?.transferSize===0&&resource.decodedBodySize>0)entry.source='cache';
    else if(resource?.transferSize>0){entry.source='network';entry.networkBytes=resource.transferSize===300?0:(resource.encodedBodySize||entry.bytes);}
    else entry.source='unknown';
    entry.state='decoding';
@@ -94,6 +95,7 @@ export async function prepareGameAssets(loadVisualAssets,loadStoryAssets){
  try{
   await loader.preload();
   const [assets,illustrations]=await Promise.all([loadVisualAssets(loader.load),loadStoryAssets(loader.load)]);
+  await assetFetch.flush();
   return {assets,illustrations,complete(){loader.ready();render();clearInterval(timer);},fail(error){loader.error=error;render();clearInterval(timer);}};
  }catch(error){loader.error??=error;render();clearInterval(timer);throw error;}
 }

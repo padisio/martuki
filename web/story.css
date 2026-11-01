@@ -1,0 +1,18 @@
+.story-ui[hidden],.story-gallery[hidden]{display:none!important}.sr-only{position:absolute!important;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.story-gallery{position:absolute;inset:0;z-index:9;padding:2.5% 3%;display:flex;flex-direction:column;background:#0d1828;color:#ede3ce}.story-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:2%;flex:none}.story-heading span{font-size:clamp(7px,1vw,11px);letter-spacing:1px;color:#bba67e}.story-heading h2{margin:4px 0 0;font-size:clamp(15px,2vw,24px);letter-spacing:1px;line-height:1}.story-heading button{background:#192a40;border:1px solid #526177;color:#e7d2a9;padding:8px 10px;font-size:clamp(8px,1.1vw,13px)}
+.story-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3% 2%;min-height:0;overflow:auto;overscroll-behavior:contain;flex:1;padding-bottom:2px;align-content:start}.story-card{display:flex;flex-direction:column;padding:0 0 5%;text-align:left;background:#17273b;color:#f0e5cf;border:1px solid #394c62;min-width:0;overflow:hidden;touch-action:manipulation}.story-card img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;image-rendering:pixelated}.story-card strong{padding:6% 5% 0;font-size:clamp(7px,1vw,12px);font-weight:bold;white-space:nowrap}.story-card span{padding:4% 5% 0;font-size:clamp(6px,.8vw,10px);color:#a2b7cb;white-space:nowrap}.story-card:hover,.story-card:focus-visible{border-color:#e7bc73;background:#253951}
+.story-gallery-footer{border-top:1px solid #38485c;display:flex!important;align-items:center;justify-content:space-between;padding-top:1.2%;margin-top:1.5%;flex:none;font-size:clamp(7px,.9vw,11px);color:#aab8c8;letter-spacing:0}.story-gallery-footer button{background:transparent;color:#ecc584;padding:5px 0;font-size:clamp(7px,.9vw,11px)}.story-gallery-footer span{font-style:normal!important}
+.android-app .story-heading h2{font-size:18px}.android-app .story-heading button{font-size:11px;padding:8px 12px}.android-app .story-card strong{font-size:9px}.android-app .story-card span{font-size:7px}.android-app .story-gallery-footer,.android-app .story-gallery-footer button{font-size:9px}.android-app #storyMenu{display:block}
+@media(max-height:360px){.android-app .story-heading h2{font-size:14px}.android-app .story-heading button{padding:6px 10px}.android-app .story-card strong{font-size:8px}.android-app .story-card span{font-size:6px}}
+
+/* Two transparent halves: no toolbar, labels, page counter or reserved strip. */
+.story-ui{position:absolute;inset:0;z-index:8;pointer-events:none}
+.story-ui .story-nav{position:absolute;inset:0;display:flex;pointer-events:auto;background:none}
+.story-ui .story-nav button{position:relative;width:50%;height:100%;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent;color:#f5ead3;cursor:pointer}
+.story-ui .story-nav button span{position:absolute;top:40%;left:12px;font:normal clamp(24px,4vw,40px)/1 Georgia,serif;opacity:.65;text-shadow:0 1px 4px #000,0 0 6px #000}
+.story-ui .story-nav button:last-child span{left:auto;right:12px}
+.story-ui .story-nav button:disabled{cursor:default}
+.story-ui .story-nav button:disabled span{visibility:hidden}
+.story-ui .story-nav button:hover span,.story-ui .story-nav button:focus-visible span{opacity:1}
+.story-ui .story-nav button:focus-visible{outline:none}.story-ui .story-nav button:focus-visible span{outline:1px solid #f0d69c80;outline-offset:4px}
+.story-ui.automatic .story-nav{display:none}

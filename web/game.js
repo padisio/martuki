@@ -1,9 +1,11 @@
-import {prepareGameAssets} from './asset-loader.js?v=1';
+import {assetFetch} from './asset-cache.js?v=1';
+import {captureSession,readSession,writeSession,restoreGame} from './save-state.js?v=1';
+import {prepareGameAssets} from './asset-loader.js?v=cache-1';
 import {clearCombatInput} from './combat-feel.js?v=52';
-import {Game,ARENAS,OFFICE_BOSS_BEATS} from './core.js?v=56';
-import {loadVisualAssets,createGameView} from './view-v2.js?v=60';
-import {StoryPlayer,loadStoryAssets,createStoryView} from './story.js?v=57-sale';
-import {BossConversation,pendingBossConversation,drawBossConversation} from './boss-dialogue.js?v=56';
+import {Game,ARENAS,OFFICE_BOSS_BEATS} from './core.js?v=quiet-ui-1';
+import {loadVisualAssets,createGameView} from './view-v2.js?v=quiet-ui-1';
+import {StoryPlayer,loadStoryAssets,createStoryView} from './story.js?v=quiet-ui-1';
+import {BossConversation,pendingBossConversation,drawBossConversation} from './boss-dialogue.js?v=quiet-ui-1';
 import {CHAPTERS} from './story-data.js?v=57-sale';
 import {stormFlash} from './scene-animation.js?v=52';
 import {installTouchControls} from './touch-controls.js?v=52';
@@ -27,15 +29,70 @@ class AudioEngine{
  effect(type){if(type==='bearRumble'){this.tone(42,1.05,'sawtooth',.035,38);this.tone(68,.7,'triangle',.025,-30,.15);return;}if(type==='bofeNameCross')type='nameCross';const presets={finisher:[65,.18,'square',.06,-40],counter:[220,.16,'triangle',.06,330],perfectDodge:[660,.16,'sine',.05,440],swing:[180,.06,'triangle',.04,-110],slash:[580,.08,'sawtooth',.025,-430],hit:[95,.1,'square',.05,-55],hurt:[150,.18,'sawtooth',.035,-100],shoot:[850,.065,'sawtooth',.025,-790],empty:[80,.04,'square',.02],dodge:[360,.11,'triangle',.03,240],down:[170,.2,'triangle',.04,-120],alarm:[440,.18,'square',.018,-110],bossTell:[150,.22,'sawtooth',.022,70],slap:[130,.1,'square',.04,-80],slip:[700,.3,'triangle',.04,-600],drink:[520,.35,'sine',.04,300],fusion:[80,1.2,'sawtooth',.04,620],papers:[420,.08,'triangle',.03,-100],enemySwing:[100,.045,'triangle',.02],nameCross:[730,.18,'sawtooth',.025,-600],nameDrop:[75,.25,'square',.05,-40],bofeJoin:[440,.5,'triangle',.05,440],bofeSummon:[270,.3,'sawtooth',.04,500],bofeImpact:[65,.35,'square',.06,-35]};if(presets[type])this.tone(...presets[type]);if(type==='nameDrop'){this.tone(42,.65,'sine',.09,-10);this.tone(110,.4,'triangle',.035,-55,.03);}if(['pickup','clear','special','bossDown'].includes(type)){[330,440,550,660].forEach((f,i)=>this.tone(f,.13,'square',.025,0,i*.075));}}
 
 }
-const audio=new AudioEngine(),music=new MusicDirector();
+const audio=new AudioEngine(),music=new MusicDirector(assetFetch);
 // Browsers require a user gesture before any music or sound can be heard.
 window.addEventListener('pointerdown',()=>{if(audio.enabled)audio.start();},{once:true});
 
  let view=null,storyView=null,galleryReturn='start',lastStoryToken='',lastStorySoundToken='';
 const story=new StoryPlayer(),conversation=new BossConversation();
 
+let savedSession=null,lastSave=0;
+try{savedSession=readSession(localStorage);}catch{}
+function saveSession(){
+ if(!ready)return;
+ const data=captureSession(game,story,conversation,{paused,overlayMode,shownEnd,campaignComplete,galleryReturn});
+ if(!data)return;
+ savedSession=data;
+ try{writeSession(localStorage,data);}catch{}
+}
+function finishRestoredStory(){
+ const {origin,routeId}=storyResume;
+ if(origin==='encounter'){
+  const finish={javiPresentation:'finishOfficeCinematic',expoEncounter:'finishExhibitionEncounter',laboratoryEncounter:'finishLaboratoryCinematic',laboratoryFusion:'finishLaboratoryCinematic',sewersEncounter:'finishSewerCinematic',factoryEncounter:'finishFactoryCinematic',rooftopEncounter:'finishRooftopCinematic'}[routeId];
+  if(finish)game[finish]();else game.introTimer=game.introDuration-OFFICE_BOSS_BEATS.reveal;
+  enterGameplay();return;
+ }
+ if(origin==='intro'){
+  if(game.mode==='won'){game.nextLevel();shownEnd=false;music.restart();enterGameplay();}
+  else startRun(0,({intro:0,laboratoryIntro:2,sewersIntro:3,factoryIntro:4,rooftopIntro:5})[routeId]??0);
+  return;
+ }
+ if(origin==='outro'){
+  if(game.level===4)game.factoryRunning=false;if(game.level===5)campaignComplete=true;showOverlay('won');saveSession();
+ }
+}
+let storyResume=null;
+function resumeSession(){
+ const data=savedSession;if(!data||!restoreGame(game,data))return false;
+ clearInput();story.close();conversation.close();
+ Object.assign(story,JSON.parse(JSON.stringify(data.story)));
+ Object.assign(conversation,JSON.parse(JSON.stringify(data.conversation)));
+ storyResume={origin:story.origin,routeId:story.routeId};
+ story.onComplete=finishRestoredStory;story.onCancel=returnToTitle;
+ ({shownEnd=false,campaignComplete=false,galleryReturn='start'}=data.ui??{});
+ paused=game.mode==='playing';lastStoryToken='';lastStorySoundToken='';last=performance.now();accum=0;
+ $('#overlay').hidden=true;$('#chapterSelect').close();
+ if(!story.active&&!conversation.active)showOverlay(game.mode==='playing'?'pause':game.mode==='won'?'won':game.mode==='lost'?'lost':'start');
+ syncStoryUI();syncConversationUI();return true;
+}
+function suspendSession(){
+ if(!ready)return;
+ clearInput();if(game.mode==='playing'&&!paused&&!story.active&&!conversation.active)pause();
+ saveSession();audio.context?.suspend();
+}
+window.addEventListener('pagehide',suspendSession);
+document.addEventListener('freeze',suspendSession);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)suspendSession();else{last=performance.now();accum=0;}});
+$('#resumeGame').addEventListener('click',()=>{audio.start();resumeSession();});
+$('#chooseChapter').addEventListener('click',()=>$('#chapterSelect').showModal());
+$('#closeChapters').addEventListener('click',()=>$('#chapterSelect').close());
+$('#playOffice').addEventListener('click',play);
+$('#chapterSelect').addEventListener('click',event=>{if(event.target.closest('button[id^="play"]'))$('#chapterSelect').close();},{capture:true});
+
+
 function showOverlay(kind){
  overlayMode=kind;
+ $('#chooseChapter').hidden=kind!=='start';$('#resumeGame').hidden=kind!=='start'||!savedSession;
  const win=kind==='won',lost=kind==='lost',pause=kind==='pause',final=win&&campaignComplete;
  $('#overlay').hidden=false;
  $('#overlay').classList.toggle('splash-panel',kind==='start');
@@ -57,9 +114,9 @@ function showOverlay(kind){
  $('#status').textContent=final?'Operación completada':win?'Tramo completado':lost?'Punto de control disponible':pause?'En pausa':'Lista para infiltrarse';
 }
 function clearInput(){keys.clear();touch.clear();touchControls?.clear();clearCombatInput(game.player);}
-function enterGameplay(){clearInput();paused=false;$('#overlay').classList.remove('victory-panel');$('#overlay').hidden=true;$('#pause').disabled=false;$('#pause').setAttribute('aria-label','Pausar');$('#status').textContent=['Infiltración en curso','Exposición WOW · Nivel 02','Laboratorio · Nivel 03','Alcantarillas · Nivel 04','Fábrica · Nivel 05','Azotea · Nivel 06'][game.level];$('.screen-corner').textContent=['01 / OFICINA CENTRAL','02 / EXPOSICIÓN WOW','03 / LABORATORIO','04 / ALCANTARILLAS','05 / FÁBRICA','06 / AZOTEA'][game.level];canvas.focus();last=performance.now();accum=0;}
+function enterGameplay(){clearInput();paused=false;$('#overlay').classList.remove('victory-panel');$('#overlay').hidden=true;$('#pause').disabled=false;$('#pause').setAttribute('aria-label','Pausar');$('#status').textContent=['Infiltración en curso','Exposición WOW · Nivel 02','Laboratorio · Nivel 03','Alcantarillas · Nivel 04','Fábrica · Nivel 05','Azotea · Nivel 06'][game.level];$('.screen-corner').textContent=['01 / OFICINA CENTRAL','02 / EXPOSICIÓN WOW','03 / LABORATORIO','04 / ALCANTARILLAS','05 / FÁBRICA','06 / AZOTEA'][game.level];canvas.focus();last=performance.now();accum=0;saveSession();}
 function startRun(checkpoint=0,level=game.level){campaignComplete=false;conversation.close();game.reset(checkpoint,level);music.restart();shownEnd=false;endTimer=0;enterGameplay();}
-function returnToTitle(){campaignComplete=false;clearInput();story.close();conversation.close();game.mode='attract';paused=false;showOverlay('start');syncStoryUI();}
+function returnToTitle(){saveSession();campaignComplete=false;clearInput();story.close();conversation.close();game.mode='attract';paused=false;showOverlay('start');syncStoryUI();}
 function play(){
  if(!ready||story.active)return;audio.start();
  if(overlayMode==='pause'){enterGameplay();return;}
@@ -87,12 +144,11 @@ $('#sound').addEventListener('click',sound);
 
 function syncConversationUI(){
  $('#bossDialogueUI').hidden=!conversation.active;
- if(!conversation.active)return;
+ saveSession();if(!conversation.active)return;
  const page=conversation.page;
  $('#bossDialogueText').textContent=(page.speaker?(page.speakerLabel??page.speaker)+': ':'')+page.text;
- $('#bossDialogueProgress').textContent=`${conversation.index+1} / ${conversation.pages.length}`;
  $('#bossDialoguePrevious').disabled=conversation.index===0;
- $('#bossDialogueNext').textContent=conversation.index===conversation.pages.length-1?'CONTINUAR →':'SIGUIENTE →';
+
 }
 function advanceConversation(){clearInput();conversation.next();syncConversationUI();last=performance.now();accum=0;}
 $('#bossDialogueNext').addEventListener('click',advanceConversation);
@@ -119,7 +175,7 @@ function syncStoryUI(){
  const token=[story.mode,story.origin,story.index,story.page?.chapterId,story.showArt].join(':');
  $('#storyMenu').disabled=!ready||story.active;
  $('#pause').disabled=!ready||story.active||game.mode!=='playing';
- if(token===lastStoryToken)return;lastStoryToken=token;
+ if(token===lastStoryToken)return;lastStoryToken=token;saveSession();
  const soundToken=[story.mode,story.origin,story.index,story.page?.sequence].join(':');
  if(soundToken!==lastStorySoundToken){
   lastStorySoundToken=soundToken;
@@ -127,14 +183,12 @@ function syncStoryUI(){
   else if(story.page?.soundCue)audio.effect(story.page.soundCue);
  }
  $('#storyUI').hidden=story.mode!=='sequence';$('#storyGallery').hidden=story.mode!=='gallery';
- $('#storyUI').classList.toggle('automatic',story.automatic);$('#storyUI').classList.toggle('inspect-art',story.showArt);$('#storyArt').textContent=story.showArt?'LEER TEXTO':'VER IMAGEN';$('#storyArt').setAttribute('aria-pressed',String(story.showArt));
+ $('#storyUI').classList.toggle('automatic',story.automatic);$('#storyUI').classList.toggle('inspect-art',story.showArt);
  if(story.page){
   $('#storyNarration').textContent=story.page.screenTitle??((story.page.speaker&&story.page.speaker!=='Narración'?(story.page.speakerLabel??story.page.speaker)+': ':'')+story.page.text);
-  $('#storyProgress').textContent=`${story.index+1} / ${story.pages.length}`;
   $('#storyPrevious').disabled=story.index===0;
-  $('#storySkip').textContent=story.origin==='gallery'?'VOLVER':'SALTAR';
   $('#storyNext').disabled=story.automatic;
-  $('#storyNext').textContent=story.automatic?'PRESENTACIÓN…':story.index===story.pages.length-1?(story.origin==='gallery'?'VOLVER A CAPÍTULOS':story.origin==='intro'?'EMPEZAR MISIÓN':story.origin==='encounter'?'CONTINUAR →':'VER RESULTADOS'):'SIGUIENTE →';
+
   $('#storyNext').focus();
  }else{
   $('#storyNarration').textContent='';if(story.mode==='gallery')$('#storyClose').focus();
@@ -151,8 +205,6 @@ $('#storyMenu').addEventListener('click',openStoryGallery);
 $('#storyClose').addEventListener('click',closeStoryGallery);
 $('#storyNext').addEventListener('click',()=>{story.next();syncStoryUI();});
 $('#storyPrevious').addEventListener('click',()=>{story.previous();syncStoryUI();});
-$('#storyArt').addEventListener('click',()=>{story.toggleArt();syncStoryUI();});
-$('#storySkip').addEventListener('click',()=>{story.finish();syncStoryUI();});
 $('#storyAll').addEventListener('click',()=>{story.route('campaign');syncStoryUI();});
 for(const chapter of CHAPTERS)$('#chapter-'+chapter.id).addEventListener('click',()=>{story.chapter(chapter.id);syncStoryUI();});
 
@@ -161,7 +213,7 @@ window.addEventListener('keydown',e=>{if(conversation.active){if(e.code==='KeyM'
 window.addEventListener('keyup',e=>{if(mapping[e.code])keys.delete(mapping[e.code]);});
 window.addEventListener('blur',()=>{keys.clear();touch.clear();touchControls?.clear();if(game.mode==='playing'&&!paused)pause();});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&game.mode==='playing'&&!paused)pause();});
-canvas.addEventListener('pointerdown',()=>{if(conversation.active)advanceConversation();else canvas.focus();});
+canvas.addEventListener('pointerdown',()=>canvas.focus());
 touchControls=installTouchControls({joystick:$('#joystick'),knob:$('#stickKnob'),buttons:document.querySelectorAll('[data-hold]'),onChange:held=>{touch.clear();for(const action of held)touch.add(action);}});
 // A read-only snapshot helps diagnostics without changing gameplay.
 window.martukiState=()=>({...game.snapshot(),build:'0.17.1',campaignComplete,paused,music:music.snapshot(),story:story.snapshot(),dialogue:conversation.snapshot()});
@@ -170,6 +222,7 @@ window.martukiBack=()=>{if(conversation.active){conversation.previous();syncConv
 function syncMusic(){music.sync(musicScene(game,{story,conversation}),{paused:document.hidden||(paused&&!story.active),enabled:audio.enabled,...musicOptions(story,conversation)});}
 let endTimer=0,lastThunder=-1;
 function loop(t){
+ if(ready&&t-lastSave>2000){saveSession();lastSave=t;}
  const dt=Math.min((t-(last||t))/1000,.05);last=t;sceneTime+=dt;
  if(ready&&story.active&&!document.hidden)story.update(dt);
 
@@ -203,5 +256,5 @@ function loop(t){
 requestAnimationFrame(loop);
 let startupResources;
 try{
- startupResources=await prepareGameAssets(loadVisualAssets,loadStoryAssets);const {assets,illustrations}=startupResources;storyView=createStoryView(ctx,illustrations);view=createGameView(ctx,game,assets,{touch:touchMode});startupResources.complete();ready=true;$('#loading').hidden=true;showOverlay('start');
+ startupResources=await prepareGameAssets(loadVisualAssets,loadStoryAssets);const {assets,illustrations}=startupResources;storyView=createStoryView(ctx,illustrations);view=createGameView(ctx,game,assets,{touch:touchMode});startupResources.complete();ready=true;$('#loading').hidden=true;if(!resumeSession())showOverlay('start');
 }catch(err){startupResources?.fail(err);console.error('Error al cargar los recursos',err);}
