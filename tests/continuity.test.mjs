@@ -95,3 +95,19 @@ test('laboratory retries skip only a transformation that was already seen, inclu
  assert.equal(restored.phase,'fight');assert.equal(restored.enemies[0].bear,true);assert.equal(restored.enemies[0].hp,480);assert.equal(pendingBossConversation(restored),null);
  restored.reset(3,2);assert.equal(restored.laboratoryFusionSeen,false);
 });
+
+
+test('rendering an unchanged conversation does not save to storage every frame',async()=>{
+ const {readFile}=await import('node:fs/promises');const {runInNewContext}=await import('node:vm');
+ const source=await readFile(new URL('game.js',root),'utf8');
+ const start=source.indexOf('function syncConversationUI(){'),end=source.indexOf('function advanceConversation()',start);
+ assert.ok(start>=0&&end>start);
+ let saves=0;const elements=new Map();
+ const context={lastConversationToken:'',conversation:{active:false,id:null,index:0},saveSession:()=>saves++,$:key=>{if(!elements.has(key))elements.set(key,{});return elements.get(key);}};
+ runInNewContext(source.slice(start,end),context);
+ for(let frame=0;frame<600;frame++)context.syncConversationUI();assert.ok(saves<=1,'Idle dialogue UI must not write on every gameplay frame');
+ Object.assign(context.conversation,{active:true,id:'dimitri',index:0,page:{speaker:'Martuki',text:'Vamos.'}});context.syncConversationUI();assert.equal(saves,2);
+ context.conversation.index=1;context.syncConversationUI();assert.equal(saves,3);
+ for(let frame=0;frame<600;frame++)context.syncConversationUI();assert.equal(saves,3);
+ context.conversation.active=false;context.syncConversationUI();assert.equal(saves,4);
+});

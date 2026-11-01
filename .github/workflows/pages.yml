@@ -34,7 +34,7 @@ jobs:
       - name: Comprobar la interfaz y la escala de personajes
         env:
           MARTUKI_DIST: ../site/dist/
-        run: node --test tests/quiet-ui.test.mjs tests/continuity.test.mjs
+        run: node --test tests/quiet-ui.test.mjs tests/continuity.test.mjs tests/touch.test.mjs tests/combat-feel.test.mjs
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:

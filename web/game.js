@@ -3,13 +3,13 @@ import {assetFetch} from './asset-cache.js?v=1';
 import {captureSession,readSession,writeSession,restoreGame} from './save-state.js?v=1';
 import {prepareGameAssets} from './asset-loader.js?v=cache-1';
 import {clearCombatInput} from './combat-feel.js?v=52';
-import {Game,ARENAS,OFFICE_BOSS_BEATS,BOFE_COOLDOWN} from './core.js?v=boss-retry-1';
+import {Game,ARENAS,OFFICE_BOSS_BEATS,BOFE_COOLDOWN} from './core.js?v=stick-1';
 import {loadVisualAssets,createGameView} from './view-v2.js?v=abilities-1';
 import {StoryPlayer,loadStoryAssets,createStoryView} from './story.js?v=quiet-ui-1';
 import {BossConversation,pendingBossConversation,drawBossConversation} from './boss-dialogue.js?v=quiet-ui-1';
 import {CHAPTERS} from './story-data.js?v=57-sale';
 import {stormFlash} from './scene-animation.js?v=52';
-import {installTouchControls} from './touch-controls.js?v=52';
+import {installTouchControls} from './touch-controls.js?v=stick-1';
 import {MusicDirector,musicScene,musicOptions} from './music.js?v=campaign-4';
 import './access-cue.js?v=52';
 
@@ -34,7 +34,7 @@ const audio=new AudioEngine(),music=new MusicDirector(assetFetch);
 // Browsers require a user gesture before any music or sound can be heard.
 window.addEventListener('pointerdown',()=>{if(audio.enabled)audio.start();},{once:true});
 
- let view=null,storyView=null,galleryReturn='start',lastStoryToken='',lastStorySoundToken='';
+ let view=null,storyView=null,galleryReturn='start',lastStoryToken='',lastStorySoundToken='',lastConversationToken='';
 const story=new StoryPlayer(),conversation=new BossConversation();
 
 let savedSession=null,lastSave=0;
@@ -71,7 +71,7 @@ function resumeSession(){
  storyResume={origin:story.origin,routeId:story.routeId};
  story.onComplete=finishRestoredStory;story.onCancel=returnToTitle;
  ({shownEnd=false,campaignComplete=false,galleryReturn='start'}=data.ui??{});
- paused=game.mode==='playing';lastStoryToken='';lastStorySoundToken='';last=performance.now();accum=0;
+ paused=game.mode==='playing';lastStoryToken='';lastStorySoundToken='';lastConversationToken='';last=performance.now();accum=0;
  $('#overlay').hidden=true;$('#chapterSelect').close();
  if(!story.active&&!conversation.active)showOverlay(game.mode==='playing'?'pause':game.mode==='won'?'won':game.mode==='lost'?'lost':'start');
  syncStoryUI();syncConversationUI();return true;
@@ -144,6 +144,8 @@ function sound(){audio.enabled=!audio.enabled;if(audio.enabled)audio.start();syn
 $('#sound').addEventListener('click',sound);
 
 function syncConversationUI(){
+ const token=[conversation.active,conversation.id,conversation.index].join(':');
+ if(token===lastConversationToken)return;lastConversationToken=token;
  $('#bossDialogueUI').hidden=!conversation.active;
  saveSession();if(!conversation.active)return;
  const page=conversation.page;

@@ -214,7 +214,7 @@ export class Game {
   let mx=(input.right?1:0)-(input.left?1:0),my=(input.down?1:0)-(input.up?1:0);p.moving=!!(mx||my);
   if(p.dodgeBuffer>0&&p.dodgeCD<=0&&p.hurt<=.09&&p.special<=0){p.dodgeBuffer=0;p.dodge=COMBAT.dodgeDuration;p.dodgeAge=0;p.perfectDodge=false;p.dodgeCD=COMBAT.dodgeCooldown;p.invuln=Math.max(p.invuln,COMBAT.dodgeDuration+.02);p.dodgeDir=mx||p.facing;const length=Math.hypot(mx,my)||1;p.dodgeX=(mx||(!my?p.facing:0))/length;p.dodgeY=my/length;p.hurt=0;p.action=null;p.attackCD=0;this.emit('dodge');}
   if(p.dodge>0){p.x+=(p.dodgeX??p.dodgeDir)*255*dt;p.y+=(p.dodgeY??0)*115*dt;}
-  else if(p.hurt<=0&&p.special<=0){if(mx)p.facing=mx;const slow=p.action?(p.action.kind==='shoot'?.92:.80):1;const n=mx&&my?.7071:1;p.x+=mx*(this.phase==='travel'?COMBAT.travel:COMBAT.walk)*dt*n*slow;p.y+=my*COMBAT.depth*dt*n*slow;}
+  else if(p.hurt<=0){if(mx)p.facing=mx;const slow=p.special>0?.80:p.action?(p.action.kind==='shoot'?.92:.80):1;const n=mx&&my?.7071:1;p.x+=mx*(this.phase==='travel'?COMBAT.travel:COMBAT.walk)*dt*n*slow;p.y+=my*COMBAT.depth*dt*n*slow;}
   p.y=clamp(p.y,this.level===2?203:FLOOR.top,FLOOR.bottom);
   if(this.phase==='fight'||this.phase==='clearing'){const a=ARENAS[this.stage];p.x=clamp(p.x,a.left+12,a.right-12);}else p.x=clamp(p.x,this.camera+12,WORLD-45);
   const distance=Math.hypot(p.x-oldX,(p.y-oldY)*1.6);p.moving=distance>.001&&p.dodge<=0&&p.hurt<=0&&p.special<=0;if(p.moving)p.walk+=distance/(56*ACTOR_SCALE)*8;
