@@ -15,7 +15,7 @@ import {castCharacters} from './cast-data.js?v=60';
 import {loadSplashAssets,drawBossSplash} from './boss-splashes.js?v=quiet-ui-1';
 import {laboratoryCharacters} from './laboratory-data.js?v=52';
 import {laboratoryTransformation} from './laboratory-cinematic.js?v=52';
-import {loadLaboratoryAssets,laboratoryBack,laboratoryForeground,laboratoryAnimation,laboratoryWarning} from './laboratory.js?v=52';
+import {LAB_BEAR_HEIGHT,loadLaboratoryAssets,laboratoryBack,laboratoryForeground,laboratoryAnimation,laboratoryWarning} from './laboratory.js?v=lab-scale-1';
 
 const files={office:'office-night-v1/office.png',outside:'office-night-v1/outdoors.png',foreground:'scene-v10/foreground.png',splash:'scene-v2/storm-splash.png',logo:'title-v3/logo.png',pickups:'props-v6/pickups.png',exhibition:'exhibition-v1/showroom.png'};
 export async function loadVisualAssets(loadImage,createCanvas){
@@ -136,7 +136,7 @@ export function createGameView(ctx,game,assets,{touch=false}={}){
     return;
    }
    const anim=laboratoryAnimation(e,game,time),a=assets[anim.sheet],clip=a.clips[anim.clip]??a.clips.idle,index=clip[anim.frame%clip.length];
-   laboratoryWarning(ctx,e,game.camera);drawSprite(anim.sheet,index,x,e.y,anim.bear?140:72,e.facing,e.hp<=0?clamp(e.dead/.25,0,1):1);
+   laboratoryWarning(ctx,e,game.camera);drawSprite(anim.sheet,index,x,e.y,anim.bear?LAB_BEAR_HEIGHT:72,e.facing,e.hp<=0?clamp(e.dead/.25,0,1):1);
    if(e.sayingT>0&&!anim.bear&&game.phase!=='intro'&&game.phase!=='bossdown')speeches.push([e.saying,x,e.y-118]);
    return;
   }
@@ -234,7 +234,6 @@ export function createGameView(ctx,game,assets,{touch=false}={}){
  }
  function render(t,paused=false,{hideSplash=false,quiet=false,dialogue=false,showResults=false,campaignComplete=false}={}){time=t;speeches=[];ctx.save();ctx.fillStyle='#081321';ctx.fillRect(0,0,480,270);
   if(dialogue){ctx.fillStyle='#081321';ctx.fillRect(0,0,480,270);ctx.beginPath();ctx.rect(0,0,480,192);ctx.clip();ctx.translate(48,-22);ctx.scale(.8,.8);ctx.beginPath();ctx.rect(0,29,480,241);ctx.clip();}
-  if(game.level===2&&game.stage===3&&!dialogue){ctx.translate(240,239);ctx.scale(.84,.84);ctx.translate(-240,-239);}
   if(game.shake>0&&!paused&&game.phase!=='intro')ctx.translate(Math.round(Math.sin(time*91)*game.shake),Math.round(Math.cos(time*83)*game.shake*.3));environment();
   if(game.phase==='fight'||game.phase==='clearing'){const x=game.arenas[game.stage].right-game.camera;for(let y=192;y<239;y+=9)rect(x,y,2,4,'#c86151');}
   game.pickups.forEach(pickup);const actors=[...game.enemies.map(e=>({y:e.y,draw:()=>enemy(e)})),{y:game.player.y,draw:player}].sort((a,b)=>a.y-b.y);actors.forEach(a=>a.draw());ally();effects();foreground();ctx.restore();if(!dialogue&&!['intro','bossdown'].includes(game.phase))hud();

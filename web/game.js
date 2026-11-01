@@ -4,7 +4,7 @@ import {captureSession,readSession,writeSession,restoreGame} from './save-state.
 import {prepareGameAssets} from './asset-loader.js?v=cache-1';
 import {clearCombatInput} from './combat-feel.js?v=52';
 import {Game,ARENAS,OFFICE_BOSS_BEATS,BOFE_COOLDOWN} from './core.js?v=stick-1';
-import {loadVisualAssets,createGameView} from './view-v2.js?v=abilities-1';
+import {loadVisualAssets,createGameView} from './view-v2.js?v=lab-scale-1';
 import {StoryPlayer,loadStoryAssets,createStoryView} from './story.js?v=quiet-ui-1';
 import {BossConversation,pendingBossConversation,drawBossConversation} from './boss-dialogue.js?v=quiet-ui-1';
 import {CHAPTERS} from './story-data.js?v=57-sale';
