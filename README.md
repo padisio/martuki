@@ -24,7 +24,7 @@ ebd2eb9a96b720209965120c7d1fdaa1f53cc257a75a1bbcd712546333f8da9e
 
 ## Despliegue
 
-El workflow descarga el paquete publicado desde la Release de este repositorio, verifica su SHA-256 y publica exclusivamente `dist/` en GitHub Pages. No necesita claves externas ni servidores adicionales. Se ejecuta al publicar la Release o manualmente desde Actions; Pages debe usar GitHub Actions como origen.
+El workflow descarga el paquete publicado desde la Release de este repositorio, verifica su SHA-256 y publica exclusivamente `dist/` en GitHub Pages. No necesita claves externas ni servidores adicionales. Se ejecuta al actualizar este workflow en `main` o manualmente desde Actions seleccionando `main`; Pages debe usar GitHub Actions como origen. Esto conserva la protección de Pages que solo permite desplegar desde la rama principal.
 
 Para otra versión, adjuntar el nuevo paquete a su Release y actualizar en el workflow el nombre, la etiqueta y el SHA-256. El ZIP también contiene una configuración alternativa para publicar directamente `dist/` si se prefiere guardar todos los recursos en Git.
 
