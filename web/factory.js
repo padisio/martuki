@@ -1,3 +1,4 @@
+import {ARMED_ENEMY_SCALE,ARMED_MARKER_HEIGHT} from './scene-scale.js?v=armed-scale-1';
 import {attackCue} from './attack-cues.js?v=52';
 import {combatCharacters} from './combat-art.js?v=quiet-ui-1';
 export async function loadFactoryAssets(loadImage){
@@ -61,8 +62,8 @@ export function combatPose(e){
  if(e.hp<=0)clip='down';
  else if(e.state==='windup')clip=e.move==='slam'?'slamLoad':'load';
  else if(e.state==='strike')clip=e.move==='butt'?'butt':e.move==='slam'?'slam':e.move==='shards'?'throw':'hit';
- else if(e.moving){clip='walk';index=Math.floor(e.walk)%6;}
+ else if(e.moving){clip='walk';index=Math.floor(e.walk/(e.soldier?ARMED_ENEMY_SCALE:1))%6;}
  const frames=data.clips[clip]??data.clips.load??data.clips.idle;
  return {sheet,frame:frames[index%frames.length]};
 }
-export function factoryWarning(ctx,e,cam){attackCue(ctx,e,cam,{height:e.rost?148:104,ranged:!e.rost&&e.move!=='butt'});}
+export function factoryWarning(ctx,e,cam){attackCue(ctx,e,cam,{height:e.rost?148:ARMED_MARKER_HEIGHT,ranged:!e.rost&&e.move!=='butt'});}

@@ -1,8 +1,8 @@
 import {waitingCast} from './encounter-waiting.js?v=59';
-import {loadRooftopAssets,rooftopBack,rooftopForeground,rooftopPose,rooftopWarning} from './rooftop.js?v=52';
-import {loadFactoryAssets,loadCombatAssets,factoryBack,factoryForeground,combatPose,factoryWarning} from './factory.js?v=quiet-ui-1';
+import {loadRooftopAssets,rooftopBack,rooftopForeground,rooftopPose,rooftopWarning} from './rooftop.js?v=armed-scale-1';
+import {loadFactoryAssets,loadCombatAssets,factoryBack,factoryForeground,combatPose,factoryWarning} from './factory.js?v=armed-scale-1';
 import {loadSewerAssets,sewerBack,sewerForeground,sewerPose,sewerWarning} from './sewers.js?v=52';
-import {ACTOR_SCALE} from './scene-scale.js?v=52';
+import {ACTOR_SCALE,ARMED_ENEMY_SCALE,ARMED_ENEMY_HEIGHT,ARMED_MARKER_HEIGHT} from './scene-scale.js?v=armed-scale-1';
 import {ARENAS,OFFICE_BOSS_BEATS,BOFE_BEATS,BOFE_COOLDOWN,BOFE_SUMMON,clamp} from './core.js?v=52';
 import {foregroundLayout,stormFlash} from './scene-animation.js?v=52';
 import {heroAnimation,enemyAnimation,officeBossIntroPose} from './animation-v6.js?v=52';
@@ -114,16 +114,16 @@ export function createGameView(ctx,game,assets,{touch=false}={}){
   if(e.menina||e.role==='breacher'){
    if(e.menina&&(e.state==='waiting'||game.phase==='intro'))return;
    const pose=rooftopPose(e);rooftopWarning(ctx,e,game.camera);
-   drawSprite(pose.sheet,pose.frame,x,e.y,e.menina?126:72,e.facing,e.hp<=0?clamp(e.dead/.3,0,1):1);
-   if(!e.menina&&e.hp<e.maxHp&&e.hp>0){rect(x-14,e.y-104,28,3,'#343c46');rect(x-14,e.y-104,28*e.hp/e.maxHp,2,'#e26855');}
+   drawSprite(pose.sheet,pose.frame,x,e.y,e.menina?126:ARMED_ENEMY_HEIGHT,e.facing,e.hp<=0?clamp(e.dead/.3,0,1):1);
+   if(!e.menina&&e.hp<e.maxHp&&e.hp>0){rect(x-14,e.y-ARMED_MARKER_HEIGHT,28,3,'#343c46');rect(x-14,e.y-ARMED_MARKER_HEIGHT,28*e.hp/e.maxHp,2,'#e26855');}
    if(e.menina&&e.state==='recover'){const cy=e.y-103;for(let i=0;i<4;i++){const t=time*3+i*Math.PI/2;rect(x+Math.cos(t)*12,cy+Math.sin(t)*18,2,2,'#beffb5');}}
    return;
   }
   if(e.soldier||e.rost){
    if(e.rost&&(e.state==='waiting'||game.phase==='intro'))return;
-   const anim=combatPose(e),h=e.rost?105:72;factoryWarning(ctx,e,game.camera);
+   const anim=combatPose(e),h=e.rost?105:ARMED_ENEMY_HEIGHT;factoryWarning(ctx,e,game.camera);
    drawSprite(anim.sheet,anim.frame,x,e.y,h,e.facing,e.hp<=0?clamp(e.dead/.25,0,1):1);
-   if(!e.rost&&e.hp>0&&e.hp<e.maxHp){rect(x-14,e.y-104,28,3,'#343c46');rect(x-14,e.y-104,28*e.hp/e.maxHp,2,'#e26855');}
+   if(!e.rost&&e.hp>0&&e.hp<e.maxHp){rect(x-14,e.y-ARMED_MARKER_HEIGHT,28,3,'#343c46');rect(x-14,e.y-ARMED_MARKER_HEIGHT,28*e.hp/e.maxHp,2,'#e26855');}
    if(e.rost&&e.sayingT>0&&game.phase==='fight')speeches.push([e.saying,x,e.y-151]);return;
   }
   if(e.elisa){
@@ -198,7 +198,7 @@ export function createGameView(ctx,game,assets,{touch=false}={}){
   const f=pickupFrames[a.kind];ctx.drawImage(assets.pickups,f.sx,f.sy,f.sw,f.sh,Math.round(x-f.pivotX),Math.round(y-f.pivotY),f.sw,f.sh);
  }
  function effects(){
-  for(const b of game.projectiles){const x=b.x-game.camera;if(b.rifle){rect(x,b.y-75,7*b.dir,1,'#ffe5a3');continue;}if(b.owner==='enemy'&&b.chemical){rect(x-3,b.y-76,6,5,'#c9dd74');rect(x-5*b.dir,b.y-75,3,3,'#5d8d56');continue;}if(b.owner==='player'){rect(x,b.y-55*ACTOR_SCALE,8*b.dir,1,'#fff0bb');rect(x-b.dir*5,b.y-55*ACTOR_SCALE,3,1,'#dfad60');}else{ctx.save();ctx.translate(Math.round(x),Math.round(b.y-(b.blue?105:32*ACTOR_SCALE)));ctx.rotate(time*9);rect(-5,-4,11,9,b.chemical?'#85eea9':b.blue?'#426cbd':b.ceramic?'#bc7860':'#f2e6cd');rect(-3,-2,7,1,b.ceramic?'#f3cfac':'#8a9a9e');rect(-3,0,4,1,b.ceramic?'#8b5147':'#8a9a9e');ctx.restore();}}
+  for(const b of game.projectiles){const x=b.x-game.camera;if(b.rifle){rect(x,b.y-75*ARMED_ENEMY_SCALE,7*b.dir,1,'#ffe5a3');continue;}if(b.owner==='enemy'&&b.chemical){rect(x-3,b.y-76,6,5,'#c9dd74');rect(x-5*b.dir,b.y-75,3,3,'#5d8d56');continue;}if(b.owner==='player'){rect(x,b.y-55*ACTOR_SCALE,8*b.dir,1,'#fff0bb');rect(x-b.dir*5,b.y-55*ACTOR_SCALE,3,1,'#dfad60');}else{ctx.save();ctx.translate(Math.round(x),Math.round(b.y-(b.blue?105:32*ACTOR_SCALE)));ctx.rotate(time*9);rect(-5,-4,11,9,b.chemical?'#85eea9':b.blue?'#426cbd':b.ceramic?'#bc7860':'#f2e6cd');rect(-3,-2,7,1,b.ceramic?'#f3cfac':'#8a9a9e');rect(-3,0,4,1,b.ceramic?'#8b5147':'#8a9a9e');ctx.restore();}}
   for(const f of game.effects){const x=f.x-game.camera;if(f.kind==='shockwave'){ctx.save();ctx.strokeStyle='#b6f9cf';ctx.lineWidth=2;ctx.globalAlpha=f.ttl/f.total;ctx.beginPath();ctx.ellipse(x,f.y,100*(1-f.ttl/f.total),18,0,0,Math.PI*2);ctx.stroke();ctx.restore();}else if(f.kind==='hit'){const t=1-f.ttl/f.total;for(let i=0;i<8;i++){const a=i*Math.PI/4;rect(x+Math.cos(a)*(3+t*15),f.y+Math.sin(a)*(3+t*11),3,2,i%2?'#fff0c2':'#e47e52');}}else text(f.text,x,f.y-(1-f.ttl/f.total)*16,9,'#ffe0a2','center');}
  }
  function hud(){const p=game.player;rect(0,0,480,29,'#131f32');rect(0,28,480,1,'#40505b');text('MARTUKI',9,4,8);rect(9,15,102,6,'#45535c');rect(10,16,100*p.hp/p.maxHp,4,'#ef6b59');text(`${Math.ceil(p.hp)}`,116,14,7,'#d5dfd3');text(p.weapon==='smg'?'METRALLETA':'PISTOLA',142,4,7,'#a5bac2');text(`${p.ammo.toString().padStart(2,'0')} BALAS`,142,15,8);text(touch?'ESPECIAL':'U · ESPECIAL',236,4,7,p.specialCD<=0?'#f1d28b':'#97acb9');
