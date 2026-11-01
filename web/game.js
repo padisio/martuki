@@ -1,9 +1,10 @@
+import {updateAbilityButton} from './ability-ui.js?v=1';
 import {assetFetch} from './asset-cache.js?v=1';
 import {captureSession,readSession,writeSession,restoreGame} from './save-state.js?v=1';
 import {prepareGameAssets} from './asset-loader.js?v=cache-1';
 import {clearCombatInput} from './combat-feel.js?v=52';
-import {Game,ARENAS,OFFICE_BOSS_BEATS} from './core.js?v=quiet-ui-1';
-import {loadVisualAssets,createGameView} from './view-v2.js?v=quiet-ui-1';
+import {Game,ARENAS,OFFICE_BOSS_BEATS,BOFE_COOLDOWN} from './core.js?v=quiet-ui-1';
+import {loadVisualAssets,createGameView} from './view-v2.js?v=abilities-1';
 import {StoryPlayer,loadStoryAssets,createStoryView} from './story.js?v=quiet-ui-1';
 import {BossConversation,pendingBossConversation,drawBossConversation} from './boss-dialogue.js?v=quiet-ui-1';
 import {CHAPTERS} from './story-data.js?v=57-sale';
@@ -248,7 +249,9 @@ function loop(t){
  if(hideControls&&!$('#touchControls').hidden)clearInput();
  $('#touchControls').hidden=hideControls;
  document.documentElement?.classList.toggle('cinematic',story.active||conversation.active||game.mode==='playing'&&['intro','bossdown','playerdown'].includes(game.phase));
- $('#summonBofe').hidden=!game.bofeUnlocked;$('#summonBofe').disabled=game.bofeCooldown>0;$('#summonBofe').setAttribute('aria-label',game.bofeCooldown>0?`Bofe recarga ${Math.ceil(game.bofeCooldown)} segundos`:'Invocar a Bofe');$('#bofeCooldown').textContent=game.bofeCooldown>0?`${Math.ceil(game.bofeCooldown)}s`:'BOFE';
+ $('#summonBofe').hidden=!game.bofeUnlocked;$('#summonBofe').disabled=game.bofeCooldown>0;
+ updateAbilityButton($('#summonBofe'),game.bofeCooldown,BOFE_COOLDOWN,'Bofe');
+ updateAbilityButton($('#specialAbility'),game.player.specialCD,10,'Hoz y martillo');
  syncStoryUI();syncConversationUI();
  syncMusic();
  requestAnimationFrame(loop);

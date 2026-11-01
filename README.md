@@ -6,7 +6,7 @@ Juego completo con seis niveles, cinemáticas, epílogo, galería de personajes,
 
 - **F** o **⛶**: pantalla completa.
 - **H** o **?**: controles.
-- **WASD / flechas**: moverse; **J** golpe; **K** cuchillo; **L** disparo; **Espacio** esquiva; **U** especial; **B** invocar a Bofe.
+- **WASD / flechas**: moverse; **J** golpe; **K** cutter; **L** disparo; **Espacio** esquiva; **U** especial; **B** invocar a Bofe.
 - **P / Esc**: pausa; **M**: sonido.
 - En móvil: orientación horizontal y controles táctiles.
 

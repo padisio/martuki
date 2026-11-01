@@ -1,0 +1,26 @@
+/* Icon-only controls retain their accessible names and original touch targets. */
+.touch-controls .touch-actions button svg{width:30px;height:30px;flex:none}
+.touch-controls .touch-actions .action-punch svg{width:36px;height:36px}
+.touch-controls .touch-actions .ability-button{
+ --ability-color:#f6ce76;--recharge:100%;
+ isolation:isolate;border:0;padding:5px;
+ background:conic-gradient(var(--ability-color) var(--recharge),#4b5968 0);
+ box-shadow:0 0 0 1px #07101dcc,0 1px 5px #0008;
+}
+.touch-controls .touch-actions .ability-button.action-bofe{--ability-color:#8ae5ff}
+.touch-controls .touch-actions .ability-button::before{
+ content:"";position:absolute;inset:3px;border-radius:50%;background:#142132;z-index:-1;
+}
+.touch-controls .touch-actions .ability-button:disabled{opacity:1}
+.touch-controls .touch-actions .ability-button.is-cooling svg,
+.touch-controls .touch-actions .ability-button.is-cooling .bofe-icon{opacity:.22}
+.touch-controls .touch-actions .ability-button .cooldown-value{
+ position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+ font:900 22px/1 system-ui,sans-serif;letter-spacing:-1px;
+ color:#fff;text-shadow:0 1px 3px #000,0 0 3px #000;font-variant-numeric:tabular-nums;
+}
+.touch-controls .touch-actions .ability-button .cooldown-value[hidden]{display:none}
+.touch-controls .touch-actions .bofe-icon{
+ position:absolute;inset:4px;border-radius:50%;
+ background:#142132 url('assets/boss-splashes-v1/bofe.jpg') 42% 0/418% auto no-repeat;
+}

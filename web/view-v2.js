@@ -201,8 +201,15 @@ export function createGameView(ctx,game,assets,{touch=false}={}){
   for(const b of game.projectiles){const x=b.x-game.camera;if(b.rifle){rect(x,b.y-75,7*b.dir,1,'#ffe5a3');continue;}if(b.owner==='enemy'&&b.chemical){rect(x-3,b.y-76,6,5,'#c9dd74');rect(x-5*b.dir,b.y-75,3,3,'#5d8d56');continue;}if(b.owner==='player'){rect(x,b.y-55*ACTOR_SCALE,8*b.dir,1,'#fff0bb');rect(x-b.dir*5,b.y-55*ACTOR_SCALE,3,1,'#dfad60');}else{ctx.save();ctx.translate(Math.round(x),Math.round(b.y-(b.blue?105:32*ACTOR_SCALE)));ctx.rotate(time*9);rect(-5,-4,11,9,b.chemical?'#85eea9':b.blue?'#426cbd':b.ceramic?'#bc7860':'#f2e6cd');rect(-3,-2,7,1,b.ceramic?'#f3cfac':'#8a9a9e');rect(-3,0,4,1,b.ceramic?'#8b5147':'#8a9a9e');ctx.restore();}}
   for(const f of game.effects){const x=f.x-game.camera;if(f.kind==='shockwave'){ctx.save();ctx.strokeStyle='#b6f9cf';ctx.lineWidth=2;ctx.globalAlpha=f.ttl/f.total;ctx.beginPath();ctx.ellipse(x,f.y,100*(1-f.ttl/f.total),18,0,0,Math.PI*2);ctx.stroke();ctx.restore();}else if(f.kind==='hit'){const t=1-f.ttl/f.total;for(let i=0;i<8;i++){const a=i*Math.PI/4;rect(x+Math.cos(a)*(3+t*15),f.y+Math.sin(a)*(3+t*11),3,2,i%2?'#fff0c2':'#e47e52');}}else text(f.text,x,f.y-(1-f.ttl/f.total)*16,9,'#ffe0a2','center');}
  }
- function hud(){const p=game.player;rect(0,0,480,29,'#131f32');rect(0,28,480,1,'#40505b');text('MARTUKI',9,4,8);rect(9,15,102,6,'#45535c');rect(10,16,100*p.hp/p.maxHp,4,'#ef6b59');text(`${Math.ceil(p.hp)}`,116,14,7,'#d5dfd3');text(p.weapon==='smg'?'METRALLETA':'PISTOLA',142,4,7,'#a5bac2');text(`${p.ammo.toString().padStart(2,'0')} BALAS`,142,15,8);text(touch?'HOZ Y MARTILLO':'U · HOZ Y MARTILLO',246,4,7,p.specialCD<=0?'#f1d28b':'#97acb9');rect(246,16,93,4,'#394b5b');rect(246,16,93*(1-p.specialCD/10),4,p.specialCD<=0?'#eec479':'#a18a62');text(p.specialCD>0?`${Math.ceil(p.specialCD)}s`:'LISTO',345,14,7,'#e5c98e');text(String(game.score).padStart(7,'0'),470,4,9,'#f5e6c9','right');text('PUNTOS',470,16,6,'#95a6b5','right');
-  if(game.bofeUnlocked){const label=game.bofeCooldown>0?`BOFE ${Math.ceil(game.bofeCooldown)}s`:'B · BOFE';rect(5,247,62,22,'#142136');px(label,36,251,1,game.bofeCooldown>0?'#92a6bb':'#8ae5ff');rect(10,262,50,2,'#3c4e62');rect(10,262,50*(1-game.bofeCooldown/BOFE_COOLDOWN),2,'#8ae5ff');}
+ function hud(){const p=game.player;rect(0,0,480,29,'#131f32');rect(0,28,480,1,'#40505b');text('MARTUKI',9,4,8);rect(9,15,102,6,'#45535c');rect(10,16,100*p.hp/p.maxHp,4,'#ef6b59');text(`${Math.ceil(p.hp)}`,116,14,7,'#d5dfd3');text(p.weapon==='smg'?'METRALLETA':'PISTOLA',142,4,7,'#a5bac2');text(`${p.ammo.toString().padStart(2,'0')} BALAS`,142,15,8);text(touch?'ESPECIAL':'U · ESPECIAL',236,4,7,p.specialCD<=0?'#f1d28b':'#97acb9');
+  text(p.specialCD>0?`${Math.ceil(p.specialCD)}s`:'LISTO',236,14,7,'#f1d28b');
+  rect(236,23,76,3,'#394b5b');rect(236,23,76*(1-p.specialCD/10),3,'#eec479');
+  if(game.bofeUnlocked){
+   text(touch?'BOFE':'B · BOFE',326,4,7,'#8ae5ff');
+   text(game.bofeCooldown>0?`${Math.ceil(game.bofeCooldown)}s`:'LISTO',326,14,7,'#8ae5ff');
+   rect(326,23,62,3,'#394b5b');rect(326,23,62*(1-game.bofeCooldown/BOFE_COOLDOWN),3,'#8ae5ff');
+  }
+  text(String(game.score).padStart(7,'0'),470,4,9,'#f5e6c9','right');text('PUNTOS',470,16,6,'#95a6b5','right');
   // Only actionable cues, drawn directly over the scene without notice cards.
   const notice=game.banner?.ttl>0&&!game.banner.text.startsWith('CONTIN')?game.banner:null;
   const cue=notice?.text??(game.phase==='travel'?'CONTINÚA →':null);
