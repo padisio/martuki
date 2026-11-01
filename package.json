@@ -1,0 +1,6 @@
+{
+  "name": "martuki-web-publication",
+  "private": true,
+  "type": "module",
+  "scripts": {"test": "node --test tests/loading.test.mjs"}
+}

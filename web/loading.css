@@ -1,0 +1,19 @@
+#loading{z-index:10;background:radial-gradient(ellipse at 50% 30%,#1e2b40,#080e18 75%);padding:20px;letter-spacing:0;overflow:auto}
+#loading .load-card{width:min(680px,88vw);text-align:left;border:1px solid #516070;background:#101a2bed;padding:clamp(20px,4vw,40px);box-shadow:0 24px 80px #0008}
+#loading .load-eyebrow{color:#e4bd76;font-size:10px;letter-spacing:3px;margin-bottom:18px}
+#loading .load-heading{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:22px}
+#loading .load-title{font:900 clamp(17px,3vw,28px)/1.15 'Courier New',monospace;letter-spacing:1px;margin:0;color:#f7ebd1;text-transform:uppercase}
+#loadingPercent{font-size:clamp(28px,5vw,48px);font-weight:bold;color:#ff8573;min-width:3.5ch;text-align:right}
+#loadingBar{display:block;width:100%;height:10px;border:0;background:#27384f;appearance:none;accent-color:#ef7364}
+#loadingBar::-webkit-progress-bar{background:#27384f}#loadingBar::-webkit-progress-value{background:#ef7364}#loadingBar::-moz-progress-bar{background:#ef7364}
+#loadingStatus{font-size:11px;color:#e4bd76;margin:20px 0 8px;letter-spacing:1px;line-height:1.5}
+#loadingDetail{font-size:12px;line-height:1.5;color:#bac8d7;min-height:36px;margin:0}
+#loading .load-stats{display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:12px;padding:18px 0;border-top:1px solid #33445d;border-bottom:1px solid #33445d;margin:14px 0}
+#loading .load-stats small{display:block;color:#95a9bc;font-size:9px;letter-spacing:1px;margin-bottom:8px}
+#loading .load-stats strong{font-size:clamp(12px,2vw,18px);color:#f7ebd1;white-space:nowrap}
+#loadingFile{font-size:10px;line-height:1.4;color:#91a8bd;min-height:14px;overflow-wrap:anywhere;margin:0}
+#loading .load-note{font-size:10px;color:#91a8bd;line-height:1.5;margin:16px 0 0}
+#loadingRetry{margin-top:16px;background:#ebc27d;color:#142033;font-weight:bold;padding:12px 20px;letter-spacing:1px}
+#loadingRetry[hidden]{display:none}.loading-error #loadingStatus{color:#ff9d8f}
+@media(max-height:500px){#loading{padding:10px}#loading .load-card{padding:18px 24px}#loading .load-eyebrow{margin-bottom:10px}#loading .load-heading{margin-bottom:12px}#loadingStatus{margin-top:12px}#loading .load-stats{padding:10px 0;margin:8px 0}#loading .load-note{margin-top:10px}#loadingDetail{min-height:18px}}
+@media(max-width:420px){#loading .load-card{width:90vw;padding:18px}#loading .load-stats{gap:6px}#loading .load-stats small{font-size:8px}#loading .load-stats strong{font-size:11px}}

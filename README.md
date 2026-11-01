@@ -10,7 +10,7 @@ Juego completo con seis niveles, cinemáticas, epílogo, galería de personajes,
 - **P / Esc**: pausa; **M**: sonido.
 - En móvil: orientación horizontal y controles táctiles.
 
-La primera carga descarga las ilustraciones y puede tardar. La pantalla completa requiere pulsar un botón y depende del navegador.
+La primera carga descarga las ilustraciones y puede tardar. La pantalla de inicio muestra progreso real, archivos preparados, datos recibidos, velocidad media de descarga y recursos recuperados de caché. Si la conexión se detiene, avisa y permite reintentar. La pantalla completa requiere pulsar un botón y depende del navegador.
 
 ## Código y recursos completos
 
@@ -24,10 +24,12 @@ ebd2eb9a96b720209965120c7d1fdaa1f53cc257a75a1bbcd712546333f8da9e
 
 ## Despliegue
 
-El workflow descarga el paquete publicado desde la Release de este repositorio, verifica su SHA-256 y publica exclusivamente `dist/` en GitHub Pages. No necesita claves externas ni servidores adicionales. Se ejecuta al actualizar este workflow en `main` o manualmente desde Actions seleccionando `main`; Pages debe usar GitHub Actions como origen. Esto conserva la protección de Pages que solo permite desplegar desde la rama principal.
+El workflow comprueba el cargador, descarga el paquete publicado desde la Release de este repositorio, verifica su SHA-256 y aplica los archivos de `web/` sobre `dist/` antes de publicar en GitHub Pages. `web/` contiene las mejoras posteriores al ZIP original; para ejecutarlas localmente, copiar su contenido sobre el `dist/` extraído. No necesita claves externas ni servidores adicionales. Se ejecuta al actualizar el workflow, `web/`, `tests/` o `package.json` en `main`, o manualmente desde Actions seleccionando `main`; Pages debe usar GitHub Actions como origen. Esto conserva la protección de Pages que solo permite desplegar desde la rama principal.
 
 Para otra versión, adjuntar el nuevo paquete a su Release y actualizar en el workflow el nombre, la etiqueta y el SHA-256. El ZIP también contiene una configuración alternativa para publicar directamente `dist/` si se prefiere guardar todos los recursos en Git.
 
 ## Verificación previa
 
 160 pruebas de lógica aprobadas. Prueba en Edge con escritorio y móvil emulado, rutas bajo `/martuki/`, pantalla completa, teclado, controles táctiles, diálogos y ausencia de errores de carga. Recursos comparados contra la APK: 731 archivos idénticos; únicamente se adaptó la entrada web y el control de fullscreen, con tres archivos web añadidos.
+
+La mejora de carga añade 11 pruebas (`npm test`) para progreso, concurrencia, caché, velocidad, errores y bloqueos. Verificada en Brave con descarga ralentizada hasta completar los 486 recursos, y con un error HTTP forzado y reintento. Se cargan hasta seis imágenes en paralelo; el porcentaje llega al 100 % cuando el juego está preparado.

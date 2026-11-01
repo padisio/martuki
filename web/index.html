@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#10141f">
+  <title>Martuki Tukitukitukitieszka · Секретный агент</title>
+  <meta name="description" content="Un beat em up pixel art: una agente soviética, una oficina sospechosa y demasiadas reuniones. Seis niveles jugables y la historia completa hasta la azotea y la vuelta a casa.">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css?v=52">
+  <link rel="stylesheet" href="android.css?v=52">
+  <link rel="stylesheet" href="story.css?v=52">
+  <link rel="stylesheet" href="menus.css?v=52">
+  <link rel="stylesheet" href="web.css?v=1">
+  <script type="module" src="web-shell.js?v=1"></script>
+  <link rel="stylesheet" href="loading.css?v=1">
+</head>
+<body>
+  <main class="arcade">
+    <header class="masthead">
+      <div class="identity"><span class="red-star" aria-hidden="true">★</span><div><h1>MARTUKI <span>TUKITUKITUKITIESZKA</span></h1><p lang="ru">СЕКРЕТНЫЙ АГЕНТ</p></div></div>
+      <div class="edition"><span class="live-dot"></span> EXPEDIENTES 01 — 06 <small>OFICINA · EXPO · LABORATORIO · ALCANTARILLAS · FÁBRICA · AZOTEA</small></div>
+    </header>
+
+    <section class="machine" id="machine" aria-label="Juego Martuki, oficina y exposición WOW">
+      <div class="screen" id="screen">
+        <canvas id="game" width="1920" height="1080" tabindex="0" aria-label="Nivel jugable de Martuki. Flechas o WASD para moverse; J golpe, K cuchillo, L disparo, espacio esquivar y recogida automática al acercarse."></canvas>
+        <div class="loading" id="loading">
+          <div class="load-card">
+            <div class="load-eyebrow">CENTRAL · PREPARACIÓN DE MISIÓN</div>
+            <div class="load-heading"><h2 class="load-title">Preparando<br>infiltración</h2><strong id="loadingPercent">0%</strong></div>
+            <progress id="loadingBar" max="100" value="0" aria-label="Progreso de carga"></progress>
+            <p id="loadingStatus" role="status">CONECTANDO CON CENTRAL…</p>
+            <p id="loadingDetail">Preparando la lista de recursos del juego.</p>
+            <div class="load-stats">
+              <div><small>ARCHIVOS LISTOS</small><strong id="loadingFiles">0 / —</strong></div>
+              <div><small>DATOS LEÍDOS</small><strong id="loadingBytes">0 KB</strong></div>
+              <div><small id="loadingSpeedLabel">DESCARGA MEDIA</small><strong id="loadingSpeed">Midiendo…</strong></div>
+            </div>
+            <p id="loadingFile"></p>
+            <p class="load-note">La primera carga puede tardar. El porcentaje avanza al recibir y preparar los recursos.</p>
+            <button id="loadingRetry" hidden>REINTENTAR CARGA</button>
+          </div>
+        </div>
+        <div class="overlay" id="overlay" hidden>
+          <div class="dossier" id="dossier">
+            <span class="eyebrow" id="overlayTag">OPERACIÓN · TURNO DE OFICINA</span>
+            <h2 id="overlayTitle">Tu tapadera<br>acaba de saltar.</h2>
+            <p id="overlayText">Entraste como empleada. Descubriste una conspiración. Ahora todo el departamento quiere impedir que salgas.</p>
+            <div class="mission-note" id="missionNote">3 oleadas · 1 jefe · cero reuniones</div>
+            <button id="play" class="primary" disabled>INICIAR MISIÓN <span>→</span></button>
+            <button id="playExhibition" class="level-select">NIVEL 02 · EXPOSICIÓN</button>
+            <button id="playLaboratory" class="level-select">NIVEL 03 · LABORATORIO</button>
+            <button id="playSewers" class="level-select">NIVEL 04 · ALCANTARILLAS</button>
+            <button id="playFactory" class="level-select">NIVEL 05 · FÁBRICA</button>
+            <button id="playRooftop" class="level-select">NIVEL 06 · AZOTEA</button>
+            <button id="returnTitle" class="return-title" hidden>VOLVER A PORTADA</button>
+            <a id="castGallery" class="cast-gallery-link" href="splashes.html">PERSONAJES</a>
+            <p class="overlay-tip" id="overlayTip">Muévete también arriba y abajo para esquivar.</p>
+            <small class="build-version">v0.18.0</small>
+          </div>
+        </div>
+        <section id="storyUI" class="story-ui" aria-label="Cinemática de la historia" hidden>
+          <p id="storyNarration" class="sr-only" aria-live="polite"></p>
+          <nav class="story-nav" aria-label="Navegación de la cinemática">
+            <button id="storyPrevious" aria-label="Página anterior">← ANTERIOR</button>
+            <button id="storySkip">SALTAR</button>
+            <button id="storyArt" aria-pressed="false">VER IMAGEN</button>
+            <span id="storyProgress" aria-live="off"></span>
+            <button id="storyNext">SIGUIENTE →</button>
+          </nav>
+        </section>
+        <section id="bossDialogueUI" class="story-ui" aria-label="Conversación con el boss" hidden>
+          <p id="bossDialogueText" class="sr-only" aria-live="polite"></p>
+          <nav class="story-nav" aria-label="Avanzar conversación">
+            <button id="bossDialoguePrevious">← ANTERIOR</button>
+            <span id="bossDialogueProgress"></span>
+            <button id="bossDialogueNext">SIGUIENTE →</button>
+          </nav>
+        </section>
+        <section id="storyGallery" class="story-gallery" aria-label="Galería de capítulos" hidden>
+          <header class="story-heading"><div><span>ARCHIVO · PLAN WOW</span><h2>HISTORIA</h2></div><button id="storyClose">VOLVER ×</button></header>
+          <div class="story-grid">
+            <button id="chapter-prologue" class="story-card" aria-label="Leer 00 · INFILTRACIÓN"><img src="assets/intro-v2/01-exterior.jpg" alt="" loading="lazy"><strong>00 · INFILTRACIÓN</strong><span>PRÓLOGO · LEER</span></button>
+            <button id="chapter-office" class="story-card" aria-label="Leer 01 · DISEÑO"><img src="assets/story-v1/office.png" alt="" loading="lazy"><strong>01 · DISEÑO</strong><span>NIVEL JUGABLE · LEER</span></button>
+            <button id="chapter-exhibition" class="story-card" aria-label="Leer 02 · EXPOSICIÓN"><img src="assets/story-v1/exhibition.png" alt="" loading="lazy"><strong>02 · EXPOSICIÓN</strong><span>NIVEL JUGABLE · LEER</span></button>
+            <button id="chapter-laboratory" class="story-card" aria-label="Leer 03 · LABORATORIO"><img src="assets/story-v1/laboratory.png" alt="" loading="lazy"><strong>03 · LABORATORIO</strong><span>NIVEL JUGABLE · LEER</span></button>
+            <button id="chapter-sewers" class="story-card" aria-label="Leer 04 · ALCANTARILLAS"><img src="assets/scene-06-alcantarillas-v1/01-descenso.jpg" alt="" loading="lazy"><strong>04 · ALCANTARILLAS</strong><span>HISTORIA COMPLETA · NIVEL JUGABLE</span></button>
+            <button id="chapter-factory" class="story-card" aria-label="Leer 05 · FÁBRICA"><img src="assets/scene-07-fabrica-v1/01-entrada.jpg" alt="" loading="lazy"><strong>05 · FÁBRICA</strong><span>NIVEL JUGABLE · LEER HISTORIA</span></button>
+            <button id="chapter-rooftop" class="story-card" aria-label="Leer 06 · AZOTEA"><img src="assets/scene-08-azotea-v1/01-salida.jpg" alt="" loading="lazy"><strong>06 · AZOTEA</strong><span>HISTORIA COMPLETA · LEER</span></button>
+            <button id="chapter-epilogue" class="story-card" aria-label="Leer FIN · VUELTA A CASA"><img src="assets/scene-09-epilogo-v1/51-feliz.jpg" alt="" loading="lazy"><strong>FIN · VUELTA A CASA</strong><span>EPÍLOGO · LEER</span></button>
+          </div>
+          <footer class="story-gallery-footer"><span>Seis niveles jugables · Historia completa y epílogo.</span><button id="storyAll">LEER HISTORIA COMPLETA →</button></footer>
+        </section>
+        <div class="screen-corner">01 / OFICINA CENTRAL</div>
+      </div>
+      <div class="console">
+        <div class="signal"><i></i><span id="status" aria-live="polite">Cargando recursos</span></div>
+        <div class="machine-actions">
+          <button id="pause" title="Pausar o continuar (P)" aria-label="Pausar" disabled>Ⅱ <span>PAUSA</span></button>
+          <button id="sound" title="Activar o desactivar sonido (M)" aria-pressed="true">♫ <span>SONIDO</span></button>
+          <button id="storyMenu" title="Historia y capítulos" aria-label="Abrir galería de historia">▤ <span>HISTORIA</span></button>
+          <button id="fullscreen" title="Pantalla completa" aria-label="Pantalla completa">⛶</button>
+          <button id="webHelp" title="Controles (H)" aria-label="Ver controles" hidden>?</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="controls" aria-label="Controles">
+      <div><span class="key wide">WASD / ↑↓←→</span><span>MOVER</span></div>
+      <div><span class="key">J</span><span>GOLPE / COMBO</span></div>
+      <div><span class="key">K</span><span>CUCHILLO</span></div>
+      <div><span class="key">L</span><span>DISPARAR</span></div>
+      <div><span class="key wide">ESPACIO</span><span>ESQUIVAR</span></div>
+      <div><span class="key">AUTO</span><span>RECOGER AL PASAR</span></div>
+      <div><span class="key">U</span><span>HOZ Y MARTILLO</span></div>
+      <div><span class="key">B</span><span>INVOCAR A BOFE</span></div>
+    </section>
+    <div class="touch-controls" id="touchControls" aria-label="Controles táctiles" hidden>
+      <div class="joystick" id="joystick" role="group" aria-label="Joystick de movimiento en ocho direcciones">
+        <div class="stick-cross" aria-hidden="true"></div><div class="stick-knob" id="stickKnob" aria-hidden="true"></div>
+      </div>
+      <div class="touch-actions">
+        <button id="summonBofe" class="action-bofe" data-hold="summon" aria-label="Invocar a Bofe" hidden><span aria-hidden="true" style="font-size:21px">★</span><span id="bofeCooldown">BOFE</span></button>
+        <button class="action-special" data-hold="special" aria-label="Hoz y martillo"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M20 3c15 11 4 28-9 22l-5 5-4-4 5-5c8 9 24-1 13-18Z"/><path d="m6 4 9 2-2 5 13 13-4 4L9 15l-4 2-4-5Z"/></svg><span>ESPECIAL</span></button>
+        <button class="action-knife" data-hold="knife" aria-label="Cuchillo"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M27 2 12 15l5 5 11-12ZM9 15l10 10-3 3-4-4-7 7-4-4 7-7-2-2Z"/></svg><span>CUCHILLO</span></button>
+        <button class="action-dodge" data-hold="dodge" aria-label="Esquiva"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M22 2h6v6h-6ZM15 9h9l5 8-3 2-5-6-3 7 7 7-3 4-9-9-6 9-4-2 7-13-4 2-5-1 1-4 5 1Z"/></svg><span>ESQUIVA</span></button>
+        <button class="action-shoot" data-hold="shoot" aria-label="Disparo"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 8h25v7H16l-2 3h-3l2 10H5l1-13H3ZM27 5h3v3h-3Z"/></svg><span>DISPARO</span></button>
+        <button class="action-punch" data-hold="punch" aria-label="Golpe y combo"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 7h5V3h5v4h2V3h5v5h2V6h5v14l-7 7H10L3 19v-8h5v6h3v-5H5Z"/></svg><span>GOLPE</span></button>
+      </div>
+    </div>
+    <div class="rotate-notice" aria-hidden="true">↻<span>GIRA EL MÓVIL PARA JUGAR</span></div>
+    <footer><span>PIXEL ART · BEAT ’EM UP · PROTOTIPO JUGABLE</span><span>Los de contabilidad pegan primero.</span></footer>
+  </main>
+  <dialog id="webHelpDialog" aria-labelledby="webHelpTitle">
+    <h2 id="webHelpTitle">CONTROLES</h2>
+    <div id="webHelpKeys"></div>
+    <p>F · pantalla completa &nbsp; P / Esc · pausa &nbsp; M · sonido</p>
+    <p>Diálogos: Enter / Espacio / → para avanzar; ← para volver. En móvil, usa los controles táctiles y juega en horizontal.</p>
+    <form method="dialog"><button class="primary">VOLVER AL JUEGO</button></form>
+  </dialog>
+  <p id="webNotice" role="status" hidden></p>
+  <script type="module" src="game.js?v=loading-1"></script>
+</body>
+</html>
