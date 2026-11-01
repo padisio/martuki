@@ -1,0 +1,29 @@
+/* Browser presentation only; Android retains its native layout. */
+.web-app body{position:fixed;inset:0;overflow:hidden;overscroll-behavior:none;background:#080c13}
+.web-app .arcade{width:100%;height:100dvh;max-width:none;padding:0}
+.web-app .masthead,.web-app .arcade>.controls,.web-app .arcade>footer,.web-app .screen-corner{display:none}
+.web-app .machine{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:0;border:0;box-shadow:none;background:#080c13}
+.web-app .screen{width:min(100vw,177.777778dvh);height:min(100dvh,56.25vw);aspect-ratio:16/9;flex:none;margin:0}
+.web-app .console{position:fixed;inset:max(8px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) auto auto;z-index:20;padding:0;pointer-events:none;background:none}
+.web-app .signal{display:none}
+.web-app .machine-actions{display:flex;flex-direction:column;gap:6px;pointer-events:auto}
+.web-app .machine-actions button{width:38px;height:34px;padding:0;border:1px solid #516070;border-radius:4px;background:#152238e8;color:#f1dec0;font-size:19px}
+.web-app .machine-actions span{display:none}
+.web-app #fullscreen{display:grid;place-items:center;position:fixed;top:max(8px,env(safe-area-inset-top));right:max(8px,env(safe-area-inset-right));z-index:70;width:44px;height:44px;margin:0;padding:0;border:1px solid #8da1b380;border-radius:8px;background:#101b2cd9;color:#f1dec0;font:24px/1 sans-serif;box-shadow:0 2px 8px #0004;touch-action:manipulation;pointer-events:auto;visibility:visible}
+.web-app #fullscreen[hidden]{display:none}
+.web-app #fullscreen span{display:none}
+.web-app #fullscreen:hover,.web-app #fullscreen:focus-visible{background:#253a50;border-color:#e5c17e}
+.web-app.web-windowed .console{top:calc(max(8px,env(safe-area-inset-top)) + 50px)}
+.web-app .story-gallery-footer{display:flex}
+.web-app:not(.touch-layout) .touch-controls{display:none!important}
+#webHelp[hidden],#webNotice[hidden]{display:none}
+#webHelpDialog{width:min(640px,92vw);max-height:90dvh;overflow:auto;background:#101c2b;color:#f7ebd1;border:1px solid #d2ac6c;padding:24px}
+#webHelpDialog::backdrop{background:#030914d9}
+#webHelpDialog h2{font-size:24px;margin:0 0 20px;letter-spacing:1px}
+#webHelpDialog p{font-size:13px;line-height:1.6}
+#webHelpDialog .controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:16px 0;gap:16px}
+#webHelpDialog .controls>div{flex-wrap:wrap}
+#webHelpDialog .primary{min-width:0;width:100%;text-align:center}
+#webNotice{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:60;width:max-content;max-width:90vw;padding:12px;background:#101c2bf5;color:#f7ebd1;border:1px solid #d2ac6c;font-size:12px;text-align:center}
+.web-help-open .console{visibility:hidden}
+@media(max-height:450px){#webHelpDialog{padding:14px}#webHelpDialog .controls{gap:8px}#webHelpDialog h2{margin-bottom:10px}}
