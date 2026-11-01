@@ -1,7 +1,7 @@
 import {COMBAT,MELEE as melee,combatInput,clearCombatInput,canEnemyAttack} from './combat-feel.js?v=52';
 import {ACTOR_SCALE} from './scene-scale.js?v=52';
-import {LABORATORY_ARENAS,BEAR_INTRO,BEAR_BEATS,summonMartin,updateLaboratoryBoss} from './laboratory-combat.js?v=52';
-export {LABORATORY_ARENAS,BEAR_BEATS} from './laboratory-combat.js?v=52';
+import {LABORATORY_ARENAS,BEAR_INTRO,BEAR_BEATS,summonMartin,updateLaboratoryBoss} from './laboratory-combat.js?v=boss-retry-1';
+export {LABORATORY_ARENAS,BEAR_BEATS} from './laboratory-combat.js?v=boss-retry-1';
 import {SEWER_ARENAS,sewerEnemy,updateSewerEnemy,updateMayrena} from './sewer-combat.js?v=52';
 import {FACTORY_ARENAS,factoryEnemy,updateSoldier,updateRost} from './factory-combat.js?v=52';
 import {ROOFTOP_ARENAS,rooftopEnemy,updateMenina} from './rooftop-combat.js?v=52';
@@ -43,7 +43,19 @@ export class Game {
   this.reset(0,this.level+1);Object.assign(this,campaign);this.checkpointTotals={...campaign};return true;
  }
  retryStage(){
-  const totals={...this.checkpointTotals,time:this.time},bofeUnlocked=this.bofeUnlocked;this.reset(this.stage,this.level);Object.assign(this,totals,{bofeUnlocked});this.checkpointTotals={...totals};
+  const boss=this.enemies.find(e=>e.boss);
+  const retryBoss=this.mode==='lost'&&this.arenas[this.stage].boss&&!!boss&&boss.state!=='waiting';
+  const seenFusion=this.laboratoryFusionSeen||!!boss?.bear;
+  const totals={...this.checkpointTotals,time:this.time},bofeUnlocked=this.bofeUnlocked;
+  this.reset(this.stage,this.level);Object.assign(this,totals,{bofeUnlocked});this.checkpointTotals={...totals};
+  if(retryBoss){
+   // A death retries the encounter at full health, after its already-seen introduction.
+   this.laboratoryFusionSeen=seenFusion;
+   this.player.x=this.arenas[this.stage].trigger;this.camera=this.arenas[this.stage].left-30;
+   this.spawnStage();
+   const finish=['finishOfficeCinematic','finishExhibitionEncounter','finishLaboratoryCinematic','finishSewerCinematic','finishFactoryCinematic','finishRooftopCinematic'][this.level];
+   this[finish]();
+  }
  }
  finishExhibitionEncounter(){
   const boss=this.enemies.find(e=>e.boss&&e.fusion);
@@ -92,7 +104,7 @@ export class Game {
   Object.assign(this.player,{moving:false,action:null});return true;
  }
  reset(checkpoint=0,level=this.level??0){
-  this.level=level;const ARENAS=this.arenas;this.pendingStory=null;this.coreSabotaged=false;this.factoryFire=false;this.factoryRunning=true;this.rooftopWreck=false;
+  this.level=level;this.laboratoryFusionSeen=false;const ARENAS=this.arenas;this.pendingStory=null;this.coreSabotaged=false;this.factoryFire=false;this.factoryRunning=true;this.rooftopWreck=false;
   this.bofeUnlocked=false;this.bofeCooldown=0;this.bofeSummon=null;
   this.checkpointTotals={score:0,kills:0,time:0};
   this.mode='playing';this.phase='travel';this.stage=checkpoint;this.time=0;this.score=0;this.kills=0;this.combo=0;this.comboT=0;this.camera=checkpoint?ARENAS[checkpoint].left-180:0;this.enemies=[];this.projectiles=[];this.pickups=[];this.effects=[];this.events=[];this.uid=0;this.shake=0;this.banner=null;

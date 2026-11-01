@@ -58,3 +58,40 @@ test('storage quota does not interrupt loading or repeatedly attempt writes',asy
  assert.equal(await(await cache('assets/one.png')).text(),'ok');await cache.flush();
  assert.equal(await(await cache('assets/two.png')).text(),'ok');await cache.flush();assert.equal(writes,1);
 });
+
+
+const {pendingBossConversation}=await import(new URL('boss-dialogue.js',root));
+const finishes=['finishOfficeCinematic','finishExhibitionEncounter','finishLaboratoryCinematic','finishSewerCinematic','finishFactoryCinematic','finishRooftopCinematic'];
+function defeat(g){g.player.invuln=0;g.hurtPlayer(999,1);for(let i=0;i<25;i++)g.update(.05,{});assert.equal(g.mode,'lost');}
+for(let level=0;level<6;level++)test(`boss ${level+1}: death retries the fight without its film, at full health`,()=>{
+ const g=new Game(()=>.5);g.reset(3,level);g.score=500;g.kills=8;g.spawnStage();g[finishes[level]]();
+ g.player.ammo=0;g.player.specialCD=8;g.bofeCooldown=20;g.score=900;defeat(g);
+ g.retryStage();
+ assert.equal(g.mode,'playing');assert.equal(g.phase,'fight');assert.equal(g.introTimer,0);assert.equal(pendingBossConversation(g),null);
+ assert.equal(g.player.hp,g.player.maxHp);assert.ok(g.player.ammo>0);assert.equal(g.player.specialCD,0);assert.equal(g.bofeCooldown,0);
+ assert.equal(g.score,500);assert.equal(g.kills,8);assert.equal(g.enemies[0].hp,g.enemies[0].maxHp);assert.equal(g.enemies[0].state,'chase');
+ assert.ok(g.player.x>=g.arenas[3].left&&g.player.x<=g.arenas[3].right);
+ if(level===1)assert.equal(g.bofeUnlocked,true);
+ if(level===4)assert.equal(g.factoryFire,true);
+ if(level===5)assert.equal(g.rooftopWreck,true);
+ defeat(g);g.retryStage();assert.equal(g.phase,'fight');assert.equal(pendingBossConversation(g),null);
+});
+test('a saved boss defeat still skips the film, while a new chapter retains it',()=>{
+ const g=new Game();g.reset(3,3);g.spawnStage();g.finishSewerCinematic();defeat(g);
+ const restored=new Game();restoreGame(restored,captureSession(g,new StoryPlayer(),new BossConversation()));
+ restored.retryStage();assert.equal(restored.phase,'fight');assert.equal(pendingBossConversation(restored),null);
+ restored.reset(3,3);restored.spawnStage();for(let i=0;i<15;i++)restored.update(.05,{});
+ assert.equal(pendingBossConversation(restored).route,'sewersEncounter');
+ g.reset(1,3);g.spawnStage();defeat(g);g.retryStage();assert.equal(g.phase,'travel');assert.equal(g.enemies.length,0);
+});
+test('laboratory retries skip only a transformation that was already seen, including after saving',()=>{
+ const g=new Game();g.reset(3,2);g.spawnStage();g.finishLaboratoryCinematic();defeat(g);g.retryStage();
+ g.hurtEnemy(g.enemies[0],999);assert.equal(g.phase,'intro');g.update(.05,{});g.introTimer=g.introDuration-.7;
+ assert.equal(pendingBossConversation(g).route,'laboratoryFusion');g.finishLaboratoryCinematic();defeat(g);
+ const restored=new Game();restoreGame(restored,captureSession(g,new StoryPlayer(),new BossConversation()));restored.retryStage();
+ assert.equal(restored.enemies[0].bear,false);assert.equal(restored.enemies[0].hp,240);
+ // Dying in the first phase again must not forget the previously seen transformation.
+ defeat(restored);restored.retryStage();restored.hurtEnemy(restored.enemies[0],999);
+ assert.equal(restored.phase,'fight');assert.equal(restored.enemies[0].bear,true);assert.equal(restored.enemies[0].hp,480);assert.equal(pendingBossConversation(restored),null);
+ restored.reset(3,2);assert.equal(restored.laboratoryFusionSeen,false);
+});
