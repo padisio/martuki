@@ -1,0 +1,35 @@
+name: Publicar Martuki en GitHub Pages
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Descargar el juego completo
+        env:
+          PACKAGE_URL: https://github.com/padisio/martuki/releases/download/v0.18.0/Martuki-Web-0.18.0.zip
+          PACKAGE_SHA256: ebd2eb9a96b720209965120c7d1fdaa1f53cc257a75a1bbcd712546333f8da9e
+        run: |
+          curl --fail --location --retry 3 --output game.zip "$PACKAGE_URL"
+          printf '%s  game.zip\n' "$PACKAGE_SHA256" | sha256sum --check --strict
+          unzip -q game.zip 'dist/*' -d site
+          test -f site/dist/index.html
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: site/dist
+      - name: Publicar
+        id: deployment
+        uses: actions/deploy-pages@v4
