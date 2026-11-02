@@ -232,11 +232,11 @@ export function createGameView(ctx,game,assets,{touch=false}={}){
   text('ENEMIGOS DERROTADOS',102,174,7,'#aec2cc');text(String(r.kills),378,174,8,'#f1d28b','right');
   text('TIEMPO DE MISIÓN',102,194,7,'#aec2cc');text(`${Math.floor(r.time/60)}:${Math.floor(r.time%60).toString().padStart(2,'0')}`,378,194,8,'#f1d28b','right');
  }
- function render(t,paused=false,{hideSplash=false,quiet=false,dialogue=false,showResults=false,campaignComplete=false}={}){time=t;speeches=[];ctx.save();ctx.fillStyle='#081321';ctx.fillRect(0,0,480,270);
+ function render(t,paused=false,{hideSplash=false,quiet=false,hideHud=false,dialogue=false,showResults=false,campaignComplete=false}={}){time=t;speeches=[];ctx.save();ctx.fillStyle='#081321';ctx.fillRect(0,0,480,270);
   if(dialogue){ctx.fillStyle='#081321';ctx.fillRect(0,0,480,270);ctx.beginPath();ctx.rect(0,0,480,192);ctx.clip();ctx.translate(48,-22);ctx.scale(.8,.8);ctx.beginPath();ctx.rect(0,29,480,241);ctx.clip();}
   if(game.shake>0&&!paused&&game.phase!=='intro')ctx.translate(Math.round(Math.sin(time*91)*game.shake),Math.round(Math.cos(time*83)*game.shake*.3));environment();
   if(game.phase==='fight'||game.phase==='clearing'){const x=game.arenas[game.stage].right-game.camera;for(let y=192;y<239;y+=9)rect(x,y,2,4,'#c86151');}
-  game.pickups.forEach(pickup);const actors=[...game.enemies.map(e=>({y:e.y,draw:()=>enemy(e)})),{y:game.player.y,draw:player}].sort((a,b)=>a.y-b.y);actors.forEach(a=>a.draw());ally();effects();foreground();ctx.restore();if(!dialogue&&!['intro','bossdown'].includes(game.phase))hud();
+  game.pickups.forEach(pickup);const actors=[...game.enemies.map(e=>({y:e.y,draw:()=>enemy(e)})),{y:game.player.y,draw:player}].sort((a,b)=>a.y-b.y);actors.forEach(a=>a.draw());ally();effects();foreground();ctx.restore();if(!hideHud&&!dialogue&&!['intro','bossdown'].includes(game.phase))hud();
   if(game.phase==='intro'&&game.level===0&&!hideSplash)drawBossSplash(ctx,assets.bossSplashes,'dimitri',game.introDuration-game.introTimer);
   if(game.phase==='intro'&&game.level===1&&!hideSplash){const elapsed=game.introDuration-game.introTimer;drawBossSplash(ctx,assets.bossSplashes,'marixas',elapsed);drawBossSplash(ctx,assets.bossSplashes,'bofe',elapsed);}
   if(game.phase==='intro'&&game.level===2&&!hideSplash){drawBossSplash(ctx,assets.bossSplashes,game.enemies.some(e=>e.transforming)?'martin':'elisa',game.introDuration-game.introTimer);}

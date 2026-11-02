@@ -1,0 +1,24 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#080f1b"><title>Martuki · Modo película</title><link rel="icon" href="icon.svg"><link rel="stylesheet" href="loading.css?v=1"><link rel="stylesheet" href="movie.css?v=1"></head><body>
+<main class="movie-stage"><canvas id="movieCanvas" width="1920" height="1080" aria-label="Película de Martuki"></canvas>
+<nav class="movie-navigation" aria-label="Navegación de la película"><button id="moviePrevious" aria-label="Escena anterior (A o izquierda)">‹</button><button id="movieNext" aria-label="Escena siguiente (D o derecha)">›</button></nav>
+<p id="movieNarration" class="sr-only" aria-live="polite"></p>
+<section id="movieStart" class="movie-overlay"><div class="movie-card"><span class="eyebrow">MARTUKI</span><h1>MODO PELÍCULA</h1><p>La historia completa, sin jugar.<br>Cinemáticas y combates resumidos con capturas del juego.</p><p>Avanza automáticamente. Puedes pausar o moverte con las flechas y las teclas A / D.</p><button id="movieBegin" class="primary" disabled>PREPARANDO PELÍCULA…</button><button id="movieRestart" hidden>VER DESDE EL PRINCIPIO</button><a href="./">Volver a portada</a></div></section>
+<section id="movieEnd" class="movie-overlay" hidden><div class="movie-card"><span class="eyebrow">MARTUKI</span><h1>FIN</h1><button id="movieAgain" class="primary">VOLVER A VER</button><a href="./">Volver a portada</a></div></section>
+        <div class="loading" id="loading">
+          <div class="load-card">
+            <div class="load-eyebrow">CENTRAL · PREPARACIÓN DE MISIÓN</div>
+            <div class="load-heading"><h2 class="load-title">Preparando<br>infiltración</h2><strong id="loadingPercent">0%</strong></div>
+            <progress id="loadingBar" max="100" value="0" aria-label="Progreso de carga"></progress>
+            <p id="loadingStatus" role="status">CONECTANDO CON CENTRAL…</p>
+            <p id="loadingDetail">Preparando la lista de recursos del juego.</p>
+            <div class="load-stats">
+              <div><small>ARCHIVOS LISTOS</small><strong id="loadingFiles">0 / —</strong></div>
+              <div><small>DATOS LEÍDOS</small><strong id="loadingBytes">0 KB</strong></div>
+              <div><small id="loadingSpeedLabel">DESCARGA MEDIA</small><strong id="loadingSpeed">Midiendo…</strong></div>
+            </div>
+            <p id="loadingFile"></p>
+            <p class="load-note">La primera carga puede tardar. El porcentaje avanza al recibir y preparar los recursos.</p>
+            <button id="loadingRetry" hidden>REINTENTAR CARGA</button>
+          </div>
+        </div>
+</main><footer class="movie-bar"><a href="./" aria-label="Volver a portada">‹ PORTADA</a><span class="spacer"></span><small>A / D · anterior / siguiente</small><span id="moviePosition"></span><button id="moviePause" aria-label="Reproducir película" aria-pressed="false">▶</button><button id="movieSound" aria-label="Silenciar sonido">♫</button><button id="movieFullscreen" aria-label="Pantalla completa">⛶</button></footer><script type="module" src="movie.js?v=1"></script></body></html>

@@ -19,3 +19,7 @@
 #chapterSelect .level-select:hover{background:#344c61}
 #chapterSelect .level-select[hidden]{display:none}
 @media(max-height:450px){#chapterSelect{padding:12px}#chapterSelect .level-select,#chapterSelect .cast-gallery-link{padding:8px;margin:5px 0}#chapterSelect header{margin-bottom:8px}}
+
+.movie-entry{display:block;text-align:center;text-decoration:none} .overlay:not(.splash-panel) .movie-entry{display:none}
+
+.overlay.splash-panel #chooseChapter{grid-column:auto}

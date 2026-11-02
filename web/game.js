@@ -1,4 +1,4 @@
-import {SoundDirector,storyEffect} from './sfx.js?v=1';
+import {SoundDirector,storyEffect} from './sfx.js?v=2';
 import {KEY_BINDINGS,cinematicDirection} from './keyboard-controls.js?v=1';
 import {updateAbilityButton} from './ability-ui.js?v=1';
 import {assetFetch} from './asset-cache.js?v=1';
@@ -25,7 +25,7 @@ let ready=false,paused=false,last=0,accum=0,sceneTime=0,overlayMode='start',show
 const mapping=KEY_BINDINGS;
 const input=()=>Object.fromEntries([...new Set([...keys,...touch])].map(k=>[k,true]));
 
-const sfx=new SoundDirector(assetFetch);
+const sfx=new SoundDirector(assetFetch,{natural:new URLSearchParams(location.search).get('sonido')==='realista'});
 class AudioEngine{
  constructor(){this.enabled=true;this.context=null;}
  start(){if(!this.enabled)return;try{if(!this.context){this.context=new (window.AudioContext||window.webkitAudioContext)();this.context.addEventListener('statechange',renderSoundButton);}sfx.start(this.context);music.start(this.context);this.context.resume().then(renderSoundButton).catch(renderSoundButton);renderSoundButton();}catch{this.enabled=false;renderSoundButton();}}

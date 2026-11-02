@@ -34,3 +34,19 @@ test('narrative sirens and roars match their actual shots, with explicit cues pr
  assert.equal(storyEffect({sequence:'intro',sceneId:'hello'}),null);
  assert.equal(storyEffect({soundCue:'drink'}),'drink');
 });
+test('natural audition uses its own real recordings, with fixed pitch and verified headroom',async()=>{
+ const urls=[],c=context(),d=new SoundDirector(async url=>{urls.push(url);return new Response(new ArrayBuffer(8));},{natural:true});
+ const manifest=JSON.parse(fs.readFileSync(new URL('assets/sfx-v2/manifest.json',root)));
+ const ids=new Set(manifest.files.map(f=>f.id));
+ for(const cue of Object.values(d.cues))for(const id of cue.files)assert.ok(ids.has(id),id);
+ for(const file of manifest.files){
+  const bytes=fs.readFileSync(new URL('assets/sfx-v2/'+file.file,root));
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),file.sha256);assert.equal(file.rate,1);assert.equal(bytes.readUInt32LE(24),44100);
+  let peak=0;for(let i=44;i<bytes.length;i+=2)peak=Math.max(peak,Math.abs(bytes.readInt16LE(i))/32768);
+  assert.ok(peak>.005&&peak<.59,file.id);
+ }
+ assert.ok(manifest.sources.every(s=>s.license==='CC0'&&s.page.startsWith('https://')));
+ await d.start(c);assert.ok(urls.every(url=>url.startsWith('assets/sfx-v2/')));
+ for(const type of ['hit','slash','thunder','access-authorized']){c.currentTime+=8;await d.play(type);assert.equal(d.voices.at(-1).source.playbackRate.value,1);}
+ d.sync({paused:true});assert.equal(d.voices.length,0);
+});

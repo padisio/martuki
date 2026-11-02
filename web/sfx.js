@@ -45,7 +45,8 @@ export function storyEffect(page){
 }
 
 export class SoundDirector{
- constructor(fetcher=(...args)=>fetch(...args)){
+ constructor(fetcher=(...args)=>fetch(...args),{natural=false}={}){
+  this.natural=natural;this.directory=natural?"sfx-v2":"sfx-v1";this.cues=natural?{...SFX,thunder:{...SFX.thunder,files:["thunder"],rate:1,gain:.23},alarm:{...SFX.alarm,gain:.07},clear:{...SFX.clear,gain:.09}}:SFX;
   this.fetcher=fetcher;this.context=null;this.buffers=new Map();this.voices=[];this.last=new Map();this.variants=new Map();this.enabled=true;this.paused=false;this.epoch=0;this.failed=new Set();
  }
  start(context){
@@ -53,13 +54,13 @@ export class SoundDirector{
   this.bus=context.createGain();this.bus.gain.value=.72;
   this.compressor=context.createDynamicsCompressor();
   Object.assign(this.compressor.threshold,{value:-12});this.compressor.knee.value=12;this.compressor.ratio.value=6;this.compressor.attack.value=.003;this.compressor.release.value=.12;
-  this.bus.connect(this.compressor);this.compressor.connect(context.destination);
+  if(this.natural)this.bus.connect(context.destination);else{this.bus.connect(this.compressor);this.compressor.connect(context.destination);}
   // <600 KB encoded, cached on disk by assetFetch. Decode only once per visit.
-  return this.ready=Promise.allSettled([...new Set(Object.values(SFX).flatMap(c=>c.files))].map(id=>this.load(id)));
+  return this.ready=Promise.allSettled([...new Set(Object.values(this.cues).flatMap(c=>c.files))].map(id=>this.load(id)));
  }
  async load(id){
   if(!this.buffers.has(id))this.buffers.set(id,(async()=>{
-   const r=await this.fetcher(`assets/sfx-v1/${id}.wav`);if(!r.ok)throw Error(id);
+   const r=await this.fetcher(`assets/${this.directory}/${id}.wav`);if(!r.ok)throw Error(id);
    const buffer=await this.context.decodeAudioData(await r.arrayBuffer());this.failed.delete(id);return buffer;
   })().catch(error=>{this.failed.add(id);this.buffers.delete(id);throw error;}));
   return this.buffers.get(id);
@@ -74,7 +75,7 @@ export class SoundDirector{
   this.enabled=enabled;this.paused=paused;
  }
  async play(type,{narrative=false}={}){
-  const cue=SFX[type],c=this.context;
+  const cue=this.cues[type],c=this.context;
   if(!cue||!c||c.state!=='running'||!this.enabled||this.paused)return false;
   const now=c.currentTime,epoch=this.epoch;
   if(now-(this.last.get(type)??-Infinity)<cue.gap)return false;
@@ -92,7 +93,7 @@ export class SoundDirector{
    quietest.source.stop();this.voices=this.voices.filter(v=>v!==quietest);
   }
   const source=c.createBufferSource(),gain=c.createGain();source.buffer=buffer;
-  source.playbackRate.value=cue.rate??(narrative?1:.98+(index%3)*.02);
+  source.playbackRate.value=this.natural?1:cue.rate??(narrative?1:.98+(index%3)*.02);
   gain.gain.value=cue.gain*(narrative?.88:1);source.connect(gain);gain.connect(this.bus);
   const voice={source,gain,type,priority};this.voices.push(voice);
   source.onended=()=>{source.disconnect();gain.disconnect();this.voices=this.voices.filter(v=>v!==voice);};

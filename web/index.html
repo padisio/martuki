@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="style.css?v=52">
   <link rel="stylesheet" href="android.css?v=52">
   <link rel="stylesheet" href="story.css?v=quiet-ui-1">
-  <link rel="stylesheet" href="menus.css?v=quiet-ui-2">
+  <link rel="stylesheet" href="menus.css?v=movie-1">
   <link rel="stylesheet" href="web.css?v=keyboard-1">
   <script type="module" src="web-shell.js?v=keyboard-1"></script>
   <link rel="stylesheet" href="loading.css?v=1">
@@ -51,10 +51,11 @@
             <div class="mission-note" id="missionNote">3 oleadas · 1 jefe · cero reuniones</div>
             <button id="play" class="primary" disabled>INICIAR MISIÓN <span>→</span></button>
             <button id="resumeGame" class="level-select" hidden>RECUPERAR PARTIDA</button>
+            <a class="level-select movie-entry" href="pelicula.html">MODO PELÍCULA</a>
             <button id="chooseChapter" class="level-select">ELEGIR CAPÍTULO</button>
             <button id="returnTitle" class="return-title" hidden>VOLVER A PORTADA</button>
             <p class="overlay-tip" id="overlayTip">Muévete también arriba y abajo para esquivar.</p>
-            <small class="build-version">v0.21.0</small>
+            <small class="build-version">v0.22.0</small>
           </div>
         </div>
         <dialog id="chapterSelect" aria-labelledby="chapterSelectTitle">
@@ -145,6 +146,6 @@
     <form method="dialog"><button id="webHelpContinue" class="primary" value="continue">VOLVER AL JUEGO</button></form>
   </dialog>
   <p id="webNotice" role="status" hidden></p>
-  <script type="module" src="game.js?v=keyboard-1"></script>
+  <script type="module" src="game.js?v=movie-1"></script>
 </body>
 </html>
