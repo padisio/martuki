@@ -1,0 +1,243 @@
+{
+  "version": "0.20.0",
+  "musicRevision": 7,
+  "tracks": {
+    "title": {
+      "urls": [
+        "assets/music-campaign-v4/title.ogg",
+        "assets/music-campaign-v4/title.mp3"
+      ],
+      "seconds": 91.42857142857143,
+      "loop": true,
+      "title": "Portada · Antes de la misión",
+      "bpm": 84,
+      "resume": true
+    },
+    "intro": {
+      "seconds": 66.206875,
+      "loop": true,
+      "bpm": 116,
+      "meter": 4,
+      "title": "Una agente nada discreta",
+      "resume": true,
+      "urls": [
+        "assets/music-campaign-v6/intro.ogg",
+        "assets/music-campaign-v6/intro.mp3"
+      ]
+    },
+    "comedy": {
+      "seconds": 71.11109375,
+      "loop": true,
+      "bpm": 108,
+      "meter": 4,
+      "title": "Aquí no ha pasado nada",
+      "resume": true,
+      "urls": [
+        "assets/music-campaign-v6/comedy.ogg",
+        "assets/music-campaign-v6/comedy.mp3"
+      ]
+    },
+    "office": {
+      "seconds": 75.0,
+      "loop": true,
+      "bpm": 128,
+      "meter": 4,
+      "title": "La ciudad no se detiene",
+      "resume": true,
+      "urls": [
+        "assets/music-campaign-v6/office.ogg",
+        "assets/music-campaign-v6/office.mp3"
+      ]
+    },
+    "exhibition": {
+      "seconds": 56.842125,
+      "loop": true,
+      "bpm": 152,
+      "meter": 3,
+      "title": "Baile entre cristales",
+      "resume": true,
+      "urls": [
+        "assets/music-campaign-v6/exhibition.ogg",
+        "assets/music-campaign-v6/exhibition.mp3"
+      ]
+    },
+    "laboratory": {
+      "seconds": 65.08475,
+      "loop": true,
+      "bpm": 118,
+      "meter": 4,
+      "title": "Una fórmula improbable",
+      "resume": true,
+      "urls": [
+        "assets/music-campaign-v6/laboratory.ogg",
+        "assets/music-campaign-v6/laboratory.mp3"
+      ]
+    },
+    "sewers": {
+      "seconds": 80.0,
+      "loop": true,
+      "bpm": 120,
+      "meter": 4,
+      "title": "El río bajo la ciudad",
+      "resume": true,
+      "urls": [
+        "assets/music-campaign-v6/sewers.ogg",
+        "assets/music-campaign-v6/sewers.mp3"
+      ]
+    },
+    "factory": {
+      "seconds": 72.72725,
+      "loop": true,
+      "bpm": 132,
+      "meter": 4,
+      "title": "Corazón de acero",
+      "resume": true,
+      "urls": [
+        "assets/music-campaign-v6/factory.ogg",
+        "assets/music-campaign-v6/factory.mp3"
+      ]
+    },
+    "rooftop": {
+      "seconds": 71.6418125,
+      "loop": true,
+      "bpm": 134,
+      "meter": 4,
+      "title": "Por encima de la tormenta",
+      "resume": true,
+      "urls": [
+        "assets/music-campaign-v6/rooftop.ogg",
+        "assets/music-campaign-v6/rooftop.mp3"
+      ]
+    },
+    "boss": {
+      "seconds": 75.0,
+      "loop": true,
+      "bpm": 128,
+      "meter": 4,
+      "title": "La amenaza tiene nombre",
+      "resume": true,
+      "urls": [
+        "assets/music-campaign-v7/boss.ogg",
+        "assets/music-campaign-v7/boss.mp3"
+      ]
+    },
+    "finalBoss": {
+      "seconds": 92.90321875,
+      "loop": true,
+      "bpm": 124,
+      "meter": 4,
+      "title": "Menina · No hay salida",
+      "resume": true,
+      "urls": [
+        "assets/music-campaign-v7/finalBoss.ogg",
+        "assets/music-campaign-v7/finalBoss.mp3"
+      ]
+    },
+    "escape": {
+      "seconds": 68.57140625,
+      "loop": true,
+      "bpm": 140,
+      "meter": 4,
+      "title": "Que espere el helicóptero",
+      "resume": true,
+      "urls": [
+        "assets/music-campaign-v6/escape.ogg",
+        "assets/music-campaign-v6/escape.mp3"
+      ]
+    },
+    "russia": {
+      "seconds": 73.84615625,
+      "loop": true,
+      "bpm": 78,
+      "meter": 4,
+      "title": "Las torres de invierno",
+      "resume": true,
+      "urls": [
+        "assets/music-campaign-v6/russia.ogg",
+        "assets/music-campaign-v6/russia.mp3"
+      ]
+    },
+    "epilogue": {
+      "seconds": 106.6666875,
+      "loop": true,
+      "bpm": 72,
+      "meter": 4,
+      "title": "Todavía queda luz",
+      "resume": true,
+      "urls": [
+        "assets/music-campaign-v6/epilogue.ogg",
+        "assets/music-campaign-v6/epilogue.mp3"
+      ]
+    },
+    "radio": {
+      "seconds": 50.5263125,
+      "loop": true,
+      "bpm": 114,
+      "meter": 4,
+      "title": "Sintonía indiscreta",
+      "resume": true,
+      "urls": [
+        "assets/music-campaign-v6/radio.ogg",
+        "assets/music-campaign-v6/radio.mp3"
+      ]
+    },
+    "transformation": {
+      "seconds": 71.11109375,
+      "loop": true,
+      "bpm": 108,
+      "meter": 4,
+      "title": "Eso ya no es humano",
+      "resume": false,
+      "urls": [
+        "assets/music-campaign-v7/transformation.ogg",
+        "assets/music-campaign-v7/transformation.mp3"
+      ]
+    },
+    "catastrophe": {
+      "seconds": 87.27275,
+      "loop": true,
+      "bpm": 132,
+      "meter": 4,
+      "title": "La azotea se viene abajo",
+      "resume": false,
+      "urls": [
+        "assets/music-campaign-v7/catastrophe.ogg",
+        "assets/music-campaign-v7/catastrophe.mp3"
+      ]
+    }
+  },
+  "sha256": {
+    "assets/music-campaign-v6/intro.ogg": "2ca85c92da4ffb29f6a3fec247694d08745bf4438e96a622cd82c9c067ca3be5",
+    "assets/music-campaign-v6/intro.mp3": "bf93c6f891cb1cb081e964dee4879a26cd6a054c2bd3e5e77b8e356117554780",
+    "assets/music-campaign-v6/comedy.ogg": "db71a9b34a58d673de5f2e4a4ca7a394f1b04eb3d647ed7c82fc882d58e6e578",
+    "assets/music-campaign-v6/comedy.mp3": "084e953d0a3ba3f6aa4981c4bb688906662e5ad37f8141e5c9941f5836163ea6",
+    "assets/music-campaign-v6/office.ogg": "bc4e1badf17ccb03921f112997b408d4274c14035bbac61321367aaa43b1e6ac",
+    "assets/music-campaign-v6/office.mp3": "5e05f3c5313b9d087881f3994d62a6be9a9443f6a5973556d97d23e66f9a9491",
+    "assets/music-campaign-v6/exhibition.ogg": "4440c432db3fbc0eab2946eb5c806d29b68c185008b01662cc7f6f93c6db5bd2",
+    "assets/music-campaign-v6/exhibition.mp3": "6a26a025041dabc62cf05be1e1bccf43166d0af9d744144a078301b5ea946177",
+    "assets/music-campaign-v6/laboratory.ogg": "4b2b1478794767cc2ddf7b4f9754c0bd2faab290d3675ebb5d45c1e2f86a24f1",
+    "assets/music-campaign-v6/laboratory.mp3": "d13fd1cf720423ad0e8eb64655450ad44decfd6e228c1bf4505a3c1d4aa22cf2",
+    "assets/music-campaign-v6/sewers.ogg": "33e1265e3a4fc12578c6335120597b4045a3019b370bd30454056fde9d1150e2",
+    "assets/music-campaign-v6/sewers.mp3": "8fa42e077d5f33e7f2a46781299aa5214320fb12a1273b38f9ccb905eb82b091",
+    "assets/music-campaign-v6/factory.ogg": "d7efc09676767387649b872a076c1125271719421d51a71406241fd15fff96cd",
+    "assets/music-campaign-v6/factory.mp3": "11088599cd68ded9b4d06c37dcef7d2e5d236f7181d0c91ac265590bfd013c46",
+    "assets/music-campaign-v6/rooftop.ogg": "05f7f4e40150a3f093443d4c48ba6d8054ab6b9fdf5338b2182c96bb1c114254",
+    "assets/music-campaign-v6/rooftop.mp3": "440cfdad17fcd2cbc833bb843deb3e90fe52af2640a15dda747641ed2c575190",
+    "assets/music-campaign-v7/boss.ogg": "532022e201bb39bb0a360edd5e9c0f4e30492c59826f10bdbae1d29228091aad",
+    "assets/music-campaign-v7/boss.mp3": "7b23f84c59e1ab67f3b80432add88f18e272d071b4ba91dafda8118876f43910",
+    "assets/music-campaign-v7/finalBoss.ogg": "204080aec7d40274319139254fec4a4c12771330f986fe24a0410b4256c580dd",
+    "assets/music-campaign-v7/finalBoss.mp3": "e637b156841d736d1ac8db1e085c5ce8735c540fed7f4a18c72d9b9e1262f10c",
+    "assets/music-campaign-v6/escape.ogg": "488c7c11083d60d45748d654da4cfdceafabf4b728b460366e80df14915efa7d",
+    "assets/music-campaign-v6/escape.mp3": "b3e7340a77c05089eec494c66236c99b6c495e76567f0d36fc295a2ec9e0584b",
+    "assets/music-campaign-v6/russia.ogg": "562cabc5afc1381e68c5deb3c4125be7987d5ba016540876a34920b442df6729",
+    "assets/music-campaign-v6/russia.mp3": "2018b16a005159e9ef5cbfc12803d76707368e1492f46f874ad1475d2c66ded3",
+    "assets/music-campaign-v6/epilogue.ogg": "a47363f76c4c2b7e575c3ad9a597b7be98914a32c0b61c136abcc3bf7abbe5e1",
+    "assets/music-campaign-v6/epilogue.mp3": "650c2482e4619cdc502b4a19026398e7c74c5340a8aa8e91a9fc7e1b680b9fb7",
+    "assets/music-campaign-v6/radio.ogg": "d61262e7fbf17af823d237df72725fc40449ed299356b21f87a4a64c8332937d",
+    "assets/music-campaign-v6/radio.mp3": "9403e2c0556bb5e8f2b3ad00a62bb5d4378ef83b8c4af7735aa84617b744ca21",
+    "assets/music-campaign-v7/transformation.ogg": "4796a9b50cab43bbf312124104212747e749f80b32758104509c0b8ebb2e5be9",
+    "assets/music-campaign-v7/transformation.mp3": "887238c97742af1a59c1e5328d969bc3a2e4ea6ee99f333bd31af252429fae98",
+    "assets/music-campaign-v7/catastrophe.ogg": "3be29f9d825c74784f044202b0ccbf0b62d0ebcb7542f71a2bc8985a33873e4d",
+    "assets/music-campaign-v7/catastrophe.mp3": "e773cb0af7cea0c49c41913e1baf818d11cbba31d491466b1efaa47063ffe143"
+  }
+}

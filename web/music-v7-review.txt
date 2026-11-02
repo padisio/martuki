@@ -1,0 +1,36 @@
+MARTUKI · REVISIÓN 7: PELIGRO, MUTACIONES Y CATÁSTROFE
+
+Se sustituyen las dos músicas de combate de jefes y se añaden dos pistas de tensión. La música de portada y los otros doce temas conservan sus archivos. Producción local con FluidSynth, GeneralUser GS y FFmpeg; sin servicios musicales de pago. No se utiliza Tuki en estas cuatro composiciones.
+
+1. MENINA · NO HAY SALIDA — finalBoss, 124 BPM
+Combate jugable contra Menina. Nueva composición en Fa menor con segunda menor, dominantes con novena menor, motivos cortos, metales graves, bajo anclado, guitarra de apoyo, cuerdas articuladas, timbales y toms. Se elimina el interludio de piano tranquilo de la versión anterior: el contraste central conserva pulso, órgano y amenaza. La segunda exposición añade una respuesta de metales. La velocidad sube moderadamente desde 116 BPM; el cambio principal está en la escritura y la orquestación.
+
+2. LA AMENAZA TIENE NOMBRE — boss, 128 BPM
+Combates de los jefes intermedios, incluyendo Marixás, Elisa / oso Martín, Mayrena y Rosi/David. Composición propia en Re menor con color frigio. Inicio de metales, respuesta de cuerdas, ataques graves y percusión más marcada. También se conserva para las entradas amenazantes que ya empleaban boss, como la revelación inicial de la pequeña Menina.
+
+3. ESO YA NO ES HUMANO — transformation, 108 BPM
+Tensión progresiva con cello, cuerdas, pedal grave, percusión y semitonos; sin clarinete cómico, pizzicato juguetón ni acordeón de radio.
+— Marixás: comienza en 12-maria-bebe y sigue durante fusión, splashes, destrucción de la peana y llegada de Josep/Bofe.
+— Oso Martín: toda laboratoryFusion, desde Elisa en el suelo hasta rugido, aparición del oso, contacto orgánico y splash. No vuelve a comedia por una frase humorística.
+— Mayrena: corta la radio al beber las probetas, en 25c-beben-probetas. Sigue durante fusión, splash y TODAS las frases de Mayrena ya transformada, incluidas las bromas de la porosidad, las poses y recoger a los niños. Al entrar en combate pasa al nuevo boss.
+— Rosi y David: comienza en 32a-mano-rosi, antes de la fusión. Continúa durante splash, horno, llamas y desafío final. El combate usa boss. Después del breve desenlace cómico, vuelve la tensión en 44-alarma hasta llegar al siguiente nivel.
+— Menina: comienza al adherirse a Javi, en v2-42-se-adhiere, y continúa durante los conductos y la reunión del organismo.
+
+4. LA AZOTEA SE VIENE ABAJO — catastrophe, 132 BPM
+Acción de peligro en Mi menor: ostinato grave, cuerdas cortas, metales, coro como textura, timbales y percusión. Entra en 48-crece, cuando aparece la escala gigante, y sigue durante destrucción y presentación. Al empezar el combate jugable pasa a finalBoss. Al caer el jefe regresa catastrophe, desde bossdown y la regeneración de 54-regenera, y continúa por todo rooftopAftermath: Marta atrapada, intervención de Josep, corazón, rotura, colapso, escala del helicóptero, tentáculo, lanzamiento, explosión y caída de Josep. No se vuelve a comedia ni a música de victoria. Al abandonar la azotea y comenzar la secuencia posterior del helicóptero vuelve la pista de acción escape. Rusia y epílogo mantienen sus entradas anteriores.
+
+CORRECCIONES DE LÓGICA
+Un diálogo activo durante fase fight hacía entrar en el caso de comedia. Se elimina esa condición: hablar durante una batalla no rebaja la música a comedia. La fase del oso transformándose también tiene un respaldo explícito de tensión. Los cambios por escena conservan su efecto en páginas sucesivas y al retroceder. Se precarga la transformación mientras suena la radio para reducir el hueco al cortarla.
+
+La música de los seis niveles sigue continua durante avance, oleadas, limpieza y descansos. Las pistas de transformación/catástrofe comienzan desde el inicio al entrar de nuevo en su bloque narrativo; no se reinician por cada página, y pausa/silencio conservan la posición.
+
+AUTORREVISIÓN
+La primera orquestación llevaba algunas frases de desarrollo demasiado arriba para metales y cello. En la revisión 2 se asignan las líneas C a cuerdas, la coda de boss a cuerdas y el pasaje D de catastrophe baja una octava en cello. Se conservan los renderizados iniciales para comparación. Se revisan métrica, armonía escrita, registros, similitudes y exclusión del motivo de Tuki.
+
+El cambio no se presenta como una simple subida de volumen: audit.json compara notas de metales graves, densidad y velocidad de percusión y ostinatos de cuerda respecto al jefe final v6. Se incluye finalBoss-igual-volumen.mp3, ajustado al volumen medio medido de la versión anterior, para poder evaluar el arreglo sin esa ventaja de nivel.
+
+Los picos, saturación, extremos del bucle, decodificación y entradas narrativas se comprueban por separado de la calidad artística. Esta evaluación usa partitura y señal medida; no es una escucha crítica humana validada y no certifica equivalencia con las grandes OST de referencia. La valoración del peligro y del timbre al oído sigue abierta.
+
+Versiones: proyecto y APK 0.20.0, código Android 42. El APK incorpora también la banda sonora JRPG v6, que antes sólo estaba integrada en el proyecto local. Las evidencias de pruebas se guardan en martuki-game/qa/music-campaign-v7/.
+
+Créditos del banco y licencia: assets/music-campaign-v7/CREDITOS.txt y assets/music-campaign-v7/GeneralUser-GS-LICENSE.txt. Sólo se distribuyen grabaciones en este paquete de escuchas.

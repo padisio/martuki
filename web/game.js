@@ -10,7 +10,7 @@ import {BossConversation,pendingBossConversation,drawBossConversation} from './b
 import {CHAPTERS} from './story-data.js?v=57-sale';
 import {stormFlash} from './scene-animation.js?v=52';
 import {installTouchControls} from './touch-controls.js?v=stick-1';
-import {MusicDirector,musicScene,musicOptions} from './music.js?v=campaign-4';
+import {MusicDirector,musicScene,musicOptions} from './music.js?v=campaign-7';
 import './access-cue.js?v=52';
 
 const $=s=>document.querySelector(s),canvas=$('#game'),ctx=canvas.getContext('2d',{alpha:false});
@@ -25,14 +25,17 @@ const input=()=>Object.fromEntries([...new Set([...keys,...touch])].map(k=>[k,tr
 
 class AudioEngine{
  constructor(){this.enabled=true;this.context=null;}
- start(){try{this.context??=new (window.AudioContext||window.webkitAudioContext)();this.context.resume();music.start(this.context);}catch{this.enabled=false;}}
+ start(){if(!this.enabled)return;try{if(!this.context){this.context=new (window.AudioContext||window.webkitAudioContext)();this.context.addEventListener('statechange',renderSoundButton);}music.start(this.context);this.context.resume().then(renderSoundButton).catch(renderSoundButton);renderSoundButton();}catch{this.enabled=false;renderSoundButton();}}
  tone(freq,duration=.09,type='square',volume=.035,slide=0,delay=0){if(!this.enabled||!this.context)return;const c=this.context,t=c.currentTime+delay,o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(Math.max(30,freq),t);if(slide)o.frequency.exponentialRampToValueAtTime(Math.max(30,freq+slide),t+duration);g.gain.setValueAtTime(volume,t);g.gain.exponentialRampToValueAtTime(.001,t+duration);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+duration);}
  effect(type){if(type==='bearRumble'){this.tone(42,1.05,'sawtooth',.035,38);this.tone(68,.7,'triangle',.025,-30,.15);return;}if(type==='bofeNameCross')type='nameCross';const presets={finisher:[65,.18,'square',.06,-40],counter:[220,.16,'triangle',.06,330],perfectDodge:[660,.16,'sine',.05,440],swing:[180,.06,'triangle',.04,-110],slash:[580,.08,'sawtooth',.025,-430],hit:[95,.1,'square',.05,-55],hurt:[150,.18,'sawtooth',.035,-100],shoot:[850,.065,'sawtooth',.025,-790],empty:[80,.04,'square',.02],dodge:[360,.11,'triangle',.03,240],down:[170,.2,'triangle',.04,-120],alarm:[440,.18,'square',.018,-110],bossTell:[150,.22,'sawtooth',.022,70],slap:[130,.1,'square',.04,-80],slip:[700,.3,'triangle',.04,-600],drink:[520,.35,'sine',.04,300],fusion:[80,1.2,'sawtooth',.04,620],papers:[420,.08,'triangle',.03,-100],enemySwing:[100,.045,'triangle',.02],nameCross:[730,.18,'sawtooth',.025,-600],nameDrop:[75,.25,'square',.05,-40],bofeJoin:[440,.5,'triangle',.05,440],bofeSummon:[270,.3,'sawtooth',.04,500],bofeImpact:[65,.35,'square',.06,-35]};if(presets[type])this.tone(...presets[type]);if(type==='nameDrop'){this.tone(42,.65,'sine',.09,-10);this.tone(110,.4,'triangle',.035,-55,.03);}if(['pickup','clear','special','bossDown'].includes(type)){[330,440,550,660].forEach((f,i)=>this.tone(f,.13,'square',.025,0,i*.075));}}
 
 }
 const audio=new AudioEngine(),music=new MusicDirector(assetFetch);
-// Browsers require a user gesture before any music or sound can be heard.
-window.addEventListener('pointerdown',()=>{if(audio.enabled)audio.start();},{once:true});
+// The sound button handles its own gesture: unlocking on pointerdown and then
+// toggling on click used to silence that very first activation.
+function unlockAudio(e){if(e.target?.closest?.('#sound')||e.code==='KeyM')return;if(audio.enabled&&audio.context?.state!=='running')audio.start();}
+window.addEventListener('pointerdown',unlockAudio);
+window.addEventListener('keydown',unlockAudio);
 
  let view=null,storyView=null,galleryReturn='start',lastStoryToken='',lastStorySoundToken='',lastConversationToken='';
 const story=new StoryPlayer(),conversation=new BossConversation();
@@ -140,7 +143,8 @@ $('#playRooftop').addEventListener('click',()=>{if(!ready||story.active)return;a
 function pause(){if(conversation.active||story.active||game.mode!=='playing'||!ready)return;if(paused){play();return;}paused=true;syncMusic();clearInput();showOverlay('pause');$('#pause').setAttribute('aria-label','Continuar');}
 $('#returnTitle').addEventListener('click',returnToTitle);
 $('#play').addEventListener('click',play);$('#pause').addEventListener('click',pause);
-function sound(){audio.enabled=!audio.enabled;if(audio.enabled)audio.start();syncMusic();$('#sound').setAttribute('aria-pressed',String(audio.enabled));$('#sound').innerHTML=(audio.enabled?'♫':'♪')+` <span>${audio.enabled?'SONIDO':'SILENCIO'}</span>`;}
+function renderSoundButton(){const playing=audio.enabled&&audio.context?.state==='running',pending=audio.enabled&&!playing;$('#sound').setAttribute('aria-pressed',String(playing));$('#sound').setAttribute('aria-label',playing?'Silenciar sonido':'Activar sonido');$('#sound').innerHTML=(playing?'♫':'♪')+` <span>${playing?'SONIDO':pending?'ACTIVAR SONIDO':'SILENCIO'}</span>`;}
+function sound(){audio.enabled=!(audio.enabled&&audio.context?.state==='running');if(audio.enabled)audio.start();syncMusic();renderSoundButton();}
 $('#sound').addEventListener('click',sound);
 
 function syncConversationUI(){
@@ -219,8 +223,8 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden&&game.mode=
 canvas.addEventListener('pointerdown',()=>canvas.focus());
 touchControls=installTouchControls({joystick:$('#joystick'),knob:$('#stickKnob'),buttons:document.querySelectorAll('[data-hold]'),onChange:held=>{touch.clear();for(const action of held)touch.add(action);}});
 // A read-only snapshot helps diagnostics without changing gameplay.
-window.martukiState=()=>({...game.snapshot(),build:'0.17.1',campaignComplete,paused,music:music.snapshot(),story:story.snapshot(),dialogue:conversation.snapshot()});
-window.martukiLifecycle=state=>{if(state==='pause'){if(game.mode==='playing'&&!paused)pause();audio.context?.suspend();}else if(audio.enabled)audio.context?.resume();};
+window.martukiState=()=>({...game.snapshot(),build:'0.20.0',campaignComplete,paused,music:music.snapshot(),story:story.snapshot(),dialogue:conversation.snapshot()});
+window.martukiLifecycle=state=>{if(state==='pause'){if(game.mode==='playing'&&!paused)pause();audio.context?.suspend().catch(()=>{});}else if(audio.enabled)audio.start();};
 window.martukiBack=()=>{if(conversation.active){conversation.previous();syncConversationUI();return true;}if(story.active){cancelStory();return true;}if(game.mode==='attract')return false;if(game.mode==='playing'&&!paused)pause();else{keys.clear();touchControls.clear();game.mode='attract';paused=false;showOverlay('start');}return true;};
 function syncMusic(){music.sync(musicScene(game,{story,conversation}),{paused:document.hidden||(paused&&!story.active),enabled:audio.enabled,...musicOptions(story,conversation)});}
 let endTimer=0,lastThunder=-1;
@@ -259,7 +263,8 @@ function loop(t){
  requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
+renderSoundButton();
 let startupResources;
 try{
- startupResources=await prepareGameAssets(loadVisualAssets,loadStoryAssets);const {assets,illustrations}=startupResources;storyView=createStoryView(ctx,illustrations);view=createGameView(ctx,game,assets,{touch:touchMode});startupResources.complete();ready=true;$('#loading').hidden=true;if(!resumeSession())showOverlay('start');
+ startupResources=await prepareGameAssets(loadVisualAssets,loadStoryAssets);const {assets,illustrations}=startupResources;storyView=createStoryView(ctx,illustrations);view=createGameView(ctx,game,assets,{touch:touchMode});startupResources.complete();ready=true;$('#loading').hidden=true;if(!resumeSession())showOverlay('start');if(document.documentElement.classList.contains('android-app'))audio.start();
 }catch(err){startupResources?.fail(err);console.error('Error al cargar los recursos',err);}

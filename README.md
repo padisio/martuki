@@ -1,3 +1,11 @@
+# Martuki · edición web 0.20.0
+
+[Jugar](https://padisio.github.io/martuki/) · [Escuchar los cuatro cambios](https://padisio.github.io/martuki/escuchar-musica.html)
+
+Banda sonora JRPG nueva, conservando la portada aprobada. Revisión 7: combates de jefe y jefe final rehechos, tensión en las transformaciones de Marixás, oso Martín, Mayrena y Rosi/David, y catástrofe durante la Menina gigante y el clímax de Josep. Tras la transformación, los diálogos no hacen volver a la comedia. La música de cada nivel continúa entre oleadas.
+
+El paquete base de recursos sigue fijado a la Release 0.18.0 y su SHA-256. El código y los audios activos nuevos se aplican desde `web/`; la versión ensamblada es 0.20.0. `web/music-release.json` identifica los 17 cues y las huellas de los nuevos audios. La escucha a igual volumen permite comparar el arreglo del jefe final sin ventaja de nivel. Las pruebas de música del workflow comprueban los recursos, la portada, la continuidad y todas las páginas posteriores a las mutaciones.
+
 # Martuki · edición web 0.18.0
 
 [Jugar en el navegador](https://padisio.github.io/martuki/)

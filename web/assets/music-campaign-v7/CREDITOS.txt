@@ -1,0 +1,9 @@
+MARTUKI · Nueva banda sonora JRPG, revisión 6
+
+Composición original del proyecto: scorebook.py. Sin Tuki ni notas importadas de bandas sonoras ajenas.
+Interpretación local: FluidSynth 2.6.1, https://www.fluidsynth.org/
+Banco instrumental: GeneralUser GS, S. Christian Collins, https://schristiancollins.com/generaluser
+Licencia del banco extraída del propio archivo: GeneralUser-GS-LICENSE.txt.
+Codificación: FFmpeg.
+No se ha utilizado ninguna API musical de pago, suscripción o crédito de generación.
+La portada aprobada se conserva sin cambios.
