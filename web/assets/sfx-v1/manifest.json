@@ -1,0 +1,156 @@
+[
+  {
+    "id": "punch-1",
+    "seconds": 0.33,
+    "peak": 0.62,
+    "bytes": 14596,
+    "sha256": "0f618aa9ad6de1e644e7415c5fe334e98aed260139417a377c152fc0c08ea452"
+  },
+  {
+    "id": "swing-1",
+    "seconds": 0.107,
+    "peak": 0.48,
+    "bytes": 4742,
+    "sha256": "0c33e976645e28edac57dbe00bad5142994c538bed5c9817f6d6bb546a13cb58"
+  },
+  {
+    "id": "cutter-1",
+    "seconds": 0.32,
+    "peak": 0.52,
+    "bytes": 14156,
+    "sha256": "e9c4faa4875324ac3abfd4d89df7cfe172a5ae64319ab5e9a5f8b518aadf23bf"
+  },
+  {
+    "id": "punch-2",
+    "seconds": 0.33,
+    "peak": 0.62,
+    "bytes": 14596,
+    "sha256": "2675721b962cd4d9f8e27d41e9abc24497d73054e5dedfebc0845d97d86db02f"
+  },
+  {
+    "id": "swing-2",
+    "seconds": 0.077,
+    "peak": 0.48,
+    "bytes": 3450,
+    "sha256": "1753e6f30ccf0a05bb167dcd9553b42ad5cf8e3fab21b2ea93ad4f1ce6e5644c"
+  },
+  {
+    "id": "cutter-2",
+    "seconds": 0.32,
+    "peak": 0.52,
+    "bytes": 14156,
+    "sha256": "87d230d00e668e82ed90b7b78ee032a5299c20c9dd077fa392a45d322e9c6403"
+  },
+  {
+    "id": "punch-3",
+    "seconds": 0.33,
+    "peak": 0.62,
+    "bytes": 14596,
+    "sha256": "56ab652b780dc3ebccc27f368a1c81314578dbaaeef39aeaed6ab37f530b5bf9"
+  },
+  {
+    "id": "swing-3",
+    "seconds": 0.11,
+    "peak": 0.48,
+    "bytes": 4916,
+    "sha256": "a0d5d3827b3c4f0b354819f6bb000ae65d083db43e43a4e58f66acbc72993391"
+  },
+  {
+    "id": "cutter-3",
+    "seconds": 0.32,
+    "peak": 0.52,
+    "bytes": 14156,
+    "sha256": "a4bf83411cb730c47315647310f962e9feafedfa06004bdd5c732389e8791717"
+  },
+  {
+    "id": "dash",
+    "seconds": 0.36,
+    "peak": 0.55,
+    "bytes": 15920,
+    "sha256": "8e8f19ab168e4b8ec8fc2a4213f77748e28fda597f9528f3ada05429d6e64907"
+  },
+  {
+    "id": "impact-heavy",
+    "seconds": 0.38,
+    "peak": 0.62,
+    "bytes": 16802,
+    "sha256": "a04ccdfff0911d28d35bc6ed6f51727c3a10a8f2be8d73f7cc5a10d0ec5d4289"
+  },
+  {
+    "id": "shot",
+    "seconds": 0.24,
+    "peak": 0.52,
+    "bytes": 10628,
+    "sha256": "79cf5ce7f604270edb08a05737503223b4af76ccec5ccc1d4c2b40b9abe58c87"
+  },
+  {
+    "id": "empty",
+    "seconds": 0.16,
+    "peak": 0.38,
+    "bytes": 7100,
+    "sha256": "f083c79278a3274c85aba85dcc65ce433d7c46e8901b8c000f9fd877b3501ad0"
+  },
+  {
+    "id": "pickup",
+    "seconds": 0.3,
+    "peak": 0.38,
+    "bytes": 13274,
+    "sha256": "22376c61b7e6325f2c0efb040467b62dec523ec40a61a2fc36b2d28789366046"
+  },
+  {
+    "id": "cloth",
+    "seconds": 0.42,
+    "peak": 0.43,
+    "bytes": 18566,
+    "sha256": "07c5dec5da16eb733448075876bf2c596e560249cb92118ccb22be293d52a074"
+  },
+  {
+    "id": "drink",
+    "seconds": 0.553,
+    "peak": 0.48,
+    "bytes": 24440,
+    "sha256": "211389e9fc9ddab63da1ae54fe6abe5ad67ddd1dde4905cdb1184d74ac639d19"
+  },
+  {
+    "id": "metal",
+    "seconds": 0.512,
+    "peak": 0.52,
+    "bytes": 22620,
+    "sha256": "3a9fbe8077b0d8272210e9dd9ff7bc54af8021bcdd51bc717f5a004255546795"
+  },
+  {
+    "id": "roar",
+    "seconds": 2.5,
+    "peak": 0.64,
+    "bytes": 110294,
+    "sha256": "08d38474712dcbf2ecbdeaa4d51ea577727c7d321f41bae07642879532332188"
+  },
+  {
+    "id": "growl",
+    "seconds": 0.65,
+    "peak": 0.48,
+    "bytes": 28708,
+    "sha256": "1cfe9af3da00aa13a7aff5787d4a11411cdfb2508160f7740cd4e9168a705c32"
+  },
+  {
+    "id": "transformation",
+    "seconds": 1.65,
+    "peak": 0.62,
+    "bytes": 72808,
+    "sha256": "099d8180eb44676de55899706201903b2448c2343bb807a91e0564f32388c63f"
+  },
+  {
+    "id": "alarm",
+    "seconds": 1.5,
+    "peak": 0.42,
+    "bytes": 66194,
+    "sha256": "51d890ccfd4fc05fa448d6b989d1de2c09b1ef7ae0f096736056dc15f0afd958"
+  },
+  {
+    "id": "collapse",
+    "seconds": 1.54,
+    "peak": 0.6,
+    "bytes": 67958,
+    "sha256": "a1b288ae3f011ea66d3d4fd5175188d4fa1a4bb965a5d1254b978e7083d2e950"
+  }
+]

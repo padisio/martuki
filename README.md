@@ -47,3 +47,12 @@ Para otra versión, adjuntar el nuevo paquete a su Release y actualizar en el wo
 La mejora de carga añade 11 pruebas (`npm test`) para progreso, concurrencia, caché, velocidad, errores y bloqueos. Verificada en Brave con descarga ralentizada hasta completar los 486 recursos, y con un error HTTP forzado y reintento. Se cargan hasta seis imágenes en paralelo; el porcentaje llega al 100 % cuando el juego está preparado.
 
 La actualización de interfaz y continuidad añade otras 11 pruebas sobre ausencia de spoilers, diálogos, recogidas, escala de la zombi rubia, restauración de partida y caché persistente. El workflow las ejecuta sobre el juego montado en `site/dist/`. En el proyecto principal pasan 182 pruebas. En Brave se ha comprobado la navegación izquierda/derecha, la recuperación de la misma página tras recargar, la recuperación del combate en pausa y una segunda carga con 486 recursos desde caché y 0 KB descargados. Estas comprobaciones de recarga reproducen la pérdida de memoria de la página; no equivalen a una prueba en un teléfono físico.
+
+
+## Actualización web 0.21.0
+
+Controles de PC visibles fuera del área de juego; esquema de teclado antes de la primera infiltración y con H; A/D y flechas para recorrer las cinemáticas. La música mantiene el tono de amenaza entre la frase de Javi, la animación de la chaqueta y el combate, y cubre las transiciones de los seis jefes.
+
+Efectos grabados y editados en `web/assets/sfx-v1/`: 22 muestras, 575 KB en total. Variantes de golpes y cutter, mezcla moderada, máximo seis voces y supresión de efectos que lleguen tarde. Sirenas breves solo en escenas de alarma; rugidos y transformaciones sincronizados con la historia. Fuentes, modificaciones y licencias en `CREDITOS.txt`. Escucha: https://padisio.github.io/martuki/escuchar-efectos.html
+
+El remate de Moscú conserva intencionadamente «que salga lo que tenga que salgar». La corrección también se aplica a partidas guardadas que ya contienen esa página.

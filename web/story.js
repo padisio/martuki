@@ -1,5 +1,5 @@
 import {drawDialogueCaption,captionLayout,speakerStyle} from './dialogue-style.js?v=quiet-ui-1';
-import {CHAPTERS,ROUTES,STORY_ART,storyAssetPath,sequencePages} from './story-data.js?v=57-sale';
+import {CHAPTERS,ROUTES,STORY_ART,storyAssetPath,sequencePages} from './story-data.js?v=moscow-1';
 import {wrapPixelText,pixelText,pixelTextWidth} from './pixel-font.js?v=52';
 import './cinematic-timing.js?v=manual-2';
 

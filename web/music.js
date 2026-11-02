@@ -14,7 +14,13 @@ export function musicScene(game,{story=null,conversation=null}={}){
  if(game.phase==='escape')return game.level===5?'catastrophe':'escape';
  if(game.stage===3&&game.phase!=='travel'){
   if(game.phase==='intro'){
-   return game.enemies?.some(e=>e.transforming||e.bear)?'transformation':'comedy';
+   const boss=game.enemies?.find(e=>e.boss);
+   if(boss?.transforming||boss?.bear)return 'transformation';
+   // The illustrated threat can end before the in-game entrance does (Javi's
+   // jacket). Keep its final cue across that bridge, including restored saves.
+   const encounter=['dimitri','marixas','elisa','mayrena','rost','menina'][game.level];
+   if(boss?.conversations?.includes(encounter))return ['boss','transformation','boss','transformation','transformation','catastrophe'][game.level];
+   return LEVEL_MUSIC[game.level??0]??'office';
   }
   if(game.level===5)return 'finalBoss';
   return 'boss';

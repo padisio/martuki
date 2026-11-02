@@ -1,3 +1,4 @@
+import {keyboardDiagram} from './keyboard-controls.js?v=1';
 const root=document.documentElement;
 if(!root.classList.contains('android-app')){
  root.classList.add('web-app');
@@ -35,20 +36,45 @@ if(!root.classList.contains('android-app')){
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)sync();});
  function autoEnter(){if(!autoAttempted){autoAttempted=true;void enter();}}
  for(const id of ['play','playExhibition','playLaboratory','playSewers','playFactory','playRooftop'])$('#'+id).addEventListener('click',autoEnter,{capture:true});
+ $('#webHelpKeys').innerHTML=keyboardDiagram();
+ // Keep the full textual legend accessible below the keyboard.
  $('#webHelpKeys').append($('.controls'));
+ const legend=document.createElement('aside');legend.id='keyboardLegend';legend.setAttribute('aria-label','Controles de teclado');
+ legend.innerHTML='<span><kbd>WASD / ↑↓←→</kbd> mover</span><span><kbd>J</kbd> golpe</span><span><kbd>K</kbd> cutter</span><span><kbd>L</kbd> disparo</span><span><kbd>Espacio</kbd> esquiva</span><span><kbd>U</kbd> hoz y martillo</span><span id="keyboardSummon" hidden><kbd>B</kbd> apoyo</span><button type="button" id="keyboardHelp"><kbd>H</kbd> controles</button>';
+ document.body.append(legend);
  $('#webHelp').hidden=false;
- function help(){
+ let introShown=false,pendingStart=null,resumeAfterHelp=false;
+ function help(start=null){
   const state=window.martukiState?.();
-  if(state?.story?.mode==='sequence'||state?.dialogue?.active)return;
-  if(state?.mode==='playing'&&!state.paused)$('#pause').click();
+  if(dialog.open||state?.story?.mode==='sequence'||state?.dialogue?.active)return;
+  pendingStart=start;resumeAfterHelp=!start&&state?.mode==='playing'&&!state.paused;
+  if(resumeAfterHelp)$('#pause').click();
+  $('#webHelpTitle').textContent=start?'ANTES DE INFILTRARTE':'CONTROLES DE TECLADO';
+  $('#webHelpContinue').textContent=start?'ENTENDIDO · COMENZAR':'VOLVER AL JUEGO';
+  dialog.returnValue='';
   root.classList.add('web-help-open');dialog.showModal();
  }
- $('#webHelp').addEventListener('click',help);
- dialog.addEventListener('close',()=>{root.classList.remove('web-help-open');$('#game').focus();});
+ $('#webHelp').addEventListener('click',()=>help());
+ $('#keyboardHelp').addEventListener('click',()=>help());
+ window.addEventListener('martuki:keyboard-intro',event=>{
+  if(root.classList.contains('touch-layout')||introShown)return;
+  event.preventDefault();help(event.detail.resume);
+ });
+ dialog.addEventListener('close',()=>{
+  root.classList.remove('web-help-open');$('#game').focus();
+  const start=pendingStart,resume=resumeAfterHelp;pendingStart=null;resumeAfterHelp=false;
+  if(start&&dialog.returnValue==='continue'){introShown=true;start();}
+  else if(resume)$('#play').click();
+ });
  window.addEventListener('keydown',e=>{
   if(e.ctrlKey||e.altKey||e.metaKey)return;
   if(e.code==='KeyF'){e.preventDefault();e.stopImmediatePropagation();if(!e.repeat)void toggle();return;}
-  if(dialog.open){e.stopImmediatePropagation();return;}
+  if(dialog.open){
+   e.stopImmediatePropagation();
+   if(['KeyD','Enter'].includes(e.code)){e.preventDefault();if(!e.repeat)dialog.close('continue');}
+   else if(e.code!=='Escape'&&e.code!=='Tab')e.preventDefault();
+   return;
+  }
   if(e.code==='KeyH'){e.preventDefault();e.stopImmediatePropagation();if(!e.repeat)help();}
   if(e.code==='Enter'&&!e.repeat&&!$('#overlay').hidden&&!$('#play').disabled)autoEnter();
  },{capture:true});

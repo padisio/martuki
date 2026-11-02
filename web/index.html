@@ -11,8 +11,8 @@
   <link rel="stylesheet" href="android.css?v=52">
   <link rel="stylesheet" href="story.css?v=quiet-ui-1">
   <link rel="stylesheet" href="menus.css?v=quiet-ui-2">
-  <link rel="stylesheet" href="web.css?v=fullscreen-2">
-  <script type="module" src="web-shell.js?v=fullscreen-2"></script>
+  <link rel="stylesheet" href="web.css?v=keyboard-1">
+  <script type="module" src="web-shell.js?v=keyboard-1"></script>
   <link rel="stylesheet" href="loading.css?v=1">
   <link rel="stylesheet" href="ability-ui.css?v=1">
 </head>
@@ -54,7 +54,7 @@
             <button id="chooseChapter" class="level-select">ELEGIR CAPÍTULO</button>
             <button id="returnTitle" class="return-title" hidden>VOLVER A PORTADA</button>
             <p class="overlay-tip" id="overlayTip">Muévete también arriba y abajo para esquivar.</p>
-            <small class="build-version">v0.20.0</small>
+            <small class="build-version">v0.21.0</small>
           </div>
         </div>
         <dialog id="chapterSelect" aria-labelledby="chapterSelectTitle">
@@ -70,15 +70,15 @@
         <section id="storyUI" class="story-ui" aria-label="Cinemática de la historia" hidden>
           <p id="storyNarration" class="sr-only" aria-live="polite"></p>
           <nav class="story-nav" aria-label="Navegación de la cinemática">
-            <button id="storyPrevious" aria-label="Página anterior"><span aria-hidden="true">‹</span></button>
-            <button id="storyNext" aria-label="Página siguiente"><span aria-hidden="true">›</span></button>
+            <button id="storyPrevious" aria-label="Página anterior (A o flecha izquierda)"><span aria-hidden="true">‹<kbd class="cinematic-key">A</kbd></span></button>
+            <button id="storyNext" aria-label="Página siguiente (D o flecha derecha)"><span aria-hidden="true">›<kbd class="cinematic-key">D</kbd></span></button>
           </nav>
         </section>
         <section id="bossDialogueUI" class="story-ui" aria-label="Conversación con el boss" hidden>
           <p id="bossDialogueText" class="sr-only" aria-live="polite"></p>
           <nav class="story-nav" aria-label="Avanzar conversación">
-            <button id="bossDialoguePrevious" aria-label="Diálogo anterior"><span aria-hidden="true">‹</span></button>
-            <button id="bossDialogueNext" aria-label="Diálogo siguiente"><span aria-hidden="true">›</span></button>
+            <button id="bossDialoguePrevious" aria-label="Diálogo anterior (A o flecha izquierda)"><span aria-hidden="true">‹<kbd class="cinematic-key">A</kbd></span></button>
+            <button id="bossDialogueNext" aria-label="Diálogo siguiente (D o flecha derecha)"><span aria-hidden="true">›<kbd class="cinematic-key">D</kbd></span></button>
           </nav>
         </section>
         <section id="storyGallery" class="story-gallery" aria-label="Galería de capítulos" hidden>
@@ -117,7 +117,7 @@
       <div><span class="key wide">ESPACIO</span><span>ESQUIVAR</span></div>
       <div><span class="key">AUTO</span><span>RECOGER AL PASAR</span></div>
       <div><span class="key">U</span><span>HOZ Y MARTILLO</span></div>
-      <div><span class="key">B</span><span>INVOCAR A BOFE</span></div>
+      <div><span class="key">B</span><span>APOYO · AL DESBLOQUEARSE</span></div>
     </section>
     <div class="touch-controls" id="touchControls" aria-label="Controles táctiles" hidden>
       <div class="joystick" id="joystick" role="group" aria-label="Joystick de movimiento en ocho direcciones">
@@ -137,12 +137,14 @@
   </main>
   <dialog id="webHelpDialog" aria-labelledby="webHelpTitle">
     <h2 id="webHelpTitle">CONTROLES</h2>
+    <p class="keyboard-intro">Mano izquierda para moverte. Mano derecha para atacar.</p>
     <div id="webHelpKeys"></div>
     <p>F · pantalla completa &nbsp; P / Esc · pausa &nbsp; M · sonido</p>
-    <p>Diálogos: Enter / Espacio / → para avanzar; ← para volver. En móvil, usa los controles táctiles y juega en horizontal.</p>
-    <form method="dialog"><button class="primary">VOLVER AL JUEGO</button></form>
+    <p class="keyboard-cinema"><kbd>A</kbd> ← retroceder &nbsp; <kbd>D</kbd> avanzar → <span>EN CINEMÁTICAS · También funcionan las flechas, Enter y Espacio.</span></p>
+    <p class="keyboard-reopen">Puedes volver a consultar este esquema con <kbd>H</kbd>. Los objetos se recogen al pasar.</p>
+    <form method="dialog"><button id="webHelpContinue" class="primary" value="continue">VOLVER AL JUEGO</button></form>
   </dialog>
   <p id="webNotice" role="status" hidden></p>
-  <script type="module" src="game.js?v=music-7"></script>
+  <script type="module" src="game.js?v=keyboard-1"></script>
 </body>
 </html>

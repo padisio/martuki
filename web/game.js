@@ -1,3 +1,5 @@
+import {SoundDirector,storyEffect} from './sfx.js?v=1';
+import {KEY_BINDINGS,cinematicDirection} from './keyboard-controls.js?v=1';
 import {updateAbilityButton} from './ability-ui.js?v=1';
 import {assetFetch} from './asset-cache.js?v=1';
 import {captureSession,readSession,writeSession,restoreGame} from './save-state.js?v=1';
@@ -5,12 +7,12 @@ import {prepareGameAssets} from './asset-loader.js?v=cache-1';
 import {clearCombatInput} from './combat-feel.js?v=52';
 import {Game,ARENAS,OFFICE_BOSS_BEATS,BOFE_COOLDOWN} from './core.js?v=armed-scale-1';
 import {loadVisualAssets,createGameView} from './view-v2.js?v=armed-scale-1';
-import {StoryPlayer,loadStoryAssets,createStoryView} from './story.js?v=quiet-ui-1';
+import {StoryPlayer,loadStoryAssets,createStoryView} from './story.js?v=keyboard-1';
 import {BossConversation,pendingBossConversation,drawBossConversation} from './boss-dialogue.js?v=quiet-ui-1';
-import {CHAPTERS} from './story-data.js?v=57-sale';
+import {CHAPTERS,SEQUENCES} from './story-data.js?v=moscow-1';
 import {stormFlash} from './scene-animation.js?v=52';
 import {installTouchControls} from './touch-controls.js?v=stick-1';
-import {MusicDirector,musicScene,musicOptions} from './music.js?v=campaign-7';
+import {MusicDirector,musicScene,musicOptions} from './music.js?v=transitions-1';
 import './access-cue.js?v=52';
 
 const $=s=>document.querySelector(s),canvas=$('#game'),ctx=canvas.getContext('2d',{alpha:false});
@@ -20,15 +22,14 @@ const touchMode=!!window.matchMedia?.('(pointer:coarse)').matches||!!document.do
 if(touchMode)document.documentElement?.classList.add('touch-layout');
 let touchControls=null;
 let ready=false,paused=false,last=0,accum=0,sceneTime=0,overlayMode='start',shownEnd=false,campaignComplete=false;
-const mapping={ArrowUp:'up',KeyW:'up',ArrowDown:'down',KeyS:'down',ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',KeyJ:'punch',KeyZ:'punch',KeyK:'knife',KeyX:'knife',KeyL:'shoot',KeyC:'shoot',Space:'dodge',KeyE:'pickup',KeyU:'special',KeyV:'special',KeyB:'summon',KeyN:'summon'};
+const mapping=KEY_BINDINGS;
 const input=()=>Object.fromEntries([...new Set([...keys,...touch])].map(k=>[k,true]));
 
+const sfx=new SoundDirector(assetFetch);
 class AudioEngine{
  constructor(){this.enabled=true;this.context=null;}
- start(){if(!this.enabled)return;try{if(!this.context){this.context=new (window.AudioContext||window.webkitAudioContext)();this.context.addEventListener('statechange',renderSoundButton);}music.start(this.context);this.context.resume().then(renderSoundButton).catch(renderSoundButton);renderSoundButton();}catch{this.enabled=false;renderSoundButton();}}
- tone(freq,duration=.09,type='square',volume=.035,slide=0,delay=0){if(!this.enabled||!this.context)return;const c=this.context,t=c.currentTime+delay,o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(Math.max(30,freq),t);if(slide)o.frequency.exponentialRampToValueAtTime(Math.max(30,freq+slide),t+duration);g.gain.setValueAtTime(volume,t);g.gain.exponentialRampToValueAtTime(.001,t+duration);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+duration);}
- effect(type){if(type==='bearRumble'){this.tone(42,1.05,'sawtooth',.035,38);this.tone(68,.7,'triangle',.025,-30,.15);return;}if(type==='bofeNameCross')type='nameCross';const presets={finisher:[65,.18,'square',.06,-40],counter:[220,.16,'triangle',.06,330],perfectDodge:[660,.16,'sine',.05,440],swing:[180,.06,'triangle',.04,-110],slash:[580,.08,'sawtooth',.025,-430],hit:[95,.1,'square',.05,-55],hurt:[150,.18,'sawtooth',.035,-100],shoot:[850,.065,'sawtooth',.025,-790],empty:[80,.04,'square',.02],dodge:[360,.11,'triangle',.03,240],down:[170,.2,'triangle',.04,-120],alarm:[440,.18,'square',.018,-110],bossTell:[150,.22,'sawtooth',.022,70],slap:[130,.1,'square',.04,-80],slip:[700,.3,'triangle',.04,-600],drink:[520,.35,'sine',.04,300],fusion:[80,1.2,'sawtooth',.04,620],papers:[420,.08,'triangle',.03,-100],enemySwing:[100,.045,'triangle',.02],nameCross:[730,.18,'sawtooth',.025,-600],nameDrop:[75,.25,'square',.05,-40],bofeJoin:[440,.5,'triangle',.05,440],bofeSummon:[270,.3,'sawtooth',.04,500],bofeImpact:[65,.35,'square',.06,-35]};if(presets[type])this.tone(...presets[type]);if(type==='nameDrop'){this.tone(42,.65,'sine',.09,-10);this.tone(110,.4,'triangle',.035,-55,.03);}if(['pickup','clear','special','bossDown'].includes(type)){[330,440,550,660].forEach((f,i)=>this.tone(f,.13,'square',.025,0,i*.075));}}
-
+ start(){if(!this.enabled)return;try{if(!this.context){this.context=new (window.AudioContext||window.webkitAudioContext)();this.context.addEventListener('statechange',renderSoundButton);}sfx.start(this.context);music.start(this.context);this.context.resume().then(renderSoundButton).catch(renderSoundButton);renderSoundButton();}catch{this.enabled=false;renderSoundButton();}}
+ effect(type,options){if(this.enabled)void sfx.play(type,options);}
 }
 const audio=new AudioEngine(),music=new MusicDirector(assetFetch);
 // The sound button handles its own gesture: unlocking on pointerdown and then
@@ -70,6 +71,10 @@ function resumeSession(){
  const data=savedSession;if(!data||!restoreGame(game,data))return false;
  clearInput();story.close();conversation.close();
  Object.assign(story,JSON.parse(JSON.stringify(data.story)));
+ // Old saves carry dialogue text: update this revised line without moving the
+ // saved reading position or discarding the player's progress.
+ const moscowLine=SEQUENCES.epilogue.find(page=>page.sceneId==='22-probeta'&&page.speaker==='Martuki');
+ for(const page of story.pages)if(page.sequence==='epilogue'&&page.sceneId==='22-probeta'&&page.speaker==='Martuki')page.text=moscowLine.text;
  Object.assign(conversation,JSON.parse(JSON.stringify(data.conversation)));
  storyResume={origin:story.origin,routeId:story.routeId};
  story.onComplete=finishRestoredStory;story.onCancel=returnToTitle;
@@ -82,7 +87,7 @@ function resumeSession(){
 function suspendSession(){
  if(!ready)return;
  clearInput();if(game.mode==='playing'&&!paused&&!story.active&&!conversation.active)pause();
- saveSession();audio.context?.suspend();
+ saveSession();sfx.stop();audio.context?.suspend();
 }
 window.addEventListener('pagehide',suspendSession);
 document.addEventListener('freeze',suspendSession);
@@ -132,6 +137,7 @@ function play(){
   else continueLevel();
   return;
  }
+ if(!window.dispatchEvent(new CustomEvent('martuki:keyboard-intro',{cancelable:true,detail:{resume:play}})))return;
  clearInput();game.mode='attract';paused=false;$('#overlay').hidden=true;
  story.route('intro',{origin:'intro',onComplete:()=>startRun(0,0),onCancel:returnToTitle});syncStoryUI();
 }
@@ -183,11 +189,10 @@ function syncStoryUI(){
  $('#storyMenu').disabled=!ready||story.active;
  $('#pause').disabled=!ready||story.active||game.mode!=='playing';
  if(token===lastStoryToken)return;lastStoryToken=token;saveSession();
- const soundToken=[story.mode,story.origin,story.index,story.page?.sequence].join(':');
+ const soundToken=[story.mode,story.origin,story.page?.sequence,story.page?.sceneId??story.index,storyEffect(story.page)].join(':');
  if(soundToken!==lastStorySoundToken){
   lastStorySoundToken=soundToken;
-  if(story.page?.soundCue==='access-authorized')globalThis.MartukiAccessCue.play(audio.context,{enabled:audio.enabled});
-  else if(story.page?.soundCue)audio.effect(story.page.soundCue);
+  const effect=storyEffect(story.page);if(effect)audio.effect(effect,{narrative:true});
  }
  $('#storyUI').hidden=story.mode!=='sequence';$('#storyGallery').hidden=story.mode!=='gallery';
  $('#storyUI').classList.toggle('automatic',story.automatic);$('#storyUI').classList.toggle('inspect-art',story.showArt);
@@ -216,17 +221,39 @@ $('#storyAll').addEventListener('click',()=>{story.route('campaign');syncStoryUI
 for(const chapter of CHAPTERS)$('#chapter-'+chapter.id).addEventListener('click',()=>{story.chapter(chapter.id);syncStoryUI();});
 
 // Browser fullscreen is handled by web-shell.js; Android is already immersive.
-window.addEventListener('keydown',e=>{if(conversation.active){if(e.code==='KeyM'){if(!e.repeat)sound();return;}e.preventDefault();if(e.repeat)return;if(['Enter','Space','ArrowRight','KeyJ','KeyZ'].includes(e.code))advanceConversation();if(e.code==='ArrowLeft'){conversation.previous();syncConversationUI();}return;}if(story.active){if(e.code==='KeyM'){if(!e.repeat)sound();return;}if(e.code==='Escape'){e.preventDefault();if(!e.repeat)cancelStory();return;}if(story.mode==='sequence'&&['Enter','Space','ArrowRight','ArrowLeft'].includes(e.code)){e.preventDefault();if(e.repeat)return;if(['Enter','Space','ArrowRight'].includes(e.code))story.next();if(e.code==='ArrowLeft'&&!story.automatic)story.previous();syncStoryUI();}else if(mapping[e.code]||e.code==='KeyP')e.preventDefault();return;}if(mapping[e.code]){if(ready)e.preventDefault();keys.add(mapping[e.code]);}if(e.repeat)return;if(e.code==='KeyP'||e.code==='Escape'){e.preventDefault();pause();}if(e.code==='KeyM')sound();if(e.code==='Enter'&&!$('#overlay').hidden)play();});
+window.addEventListener('keydown',e=>{
+ if(e.ctrlKey||e.altKey||e.metaKey)return;
+ const direction=cinematicDirection(e.code);
+ if(conversation.active){
+  if(e.code==='KeyM'){if(!e.repeat)sound();return;}
+  e.preventDefault();if(e.repeat)return;
+  if(direction===1||['KeyJ','KeyZ'].includes(e.code))advanceConversation();
+  if(direction===-1){clearInput();conversation.previous();syncConversationUI();}return;
+ }
+ if(story.active){
+  if(e.code==='KeyM'){if(!e.repeat)sound();return;}
+  if(e.code==='Escape'){e.preventDefault();if(!e.repeat)cancelStory();return;}
+  if(story.mode==='sequence'&&direction){
+   e.preventDefault();if(e.repeat)return;clearInput();
+   if(direction===1)story.next();
+   if(direction===-1&&!story.automatic)story.previous();syncStoryUI();
+  }else if(mapping[e.code]||e.code==='KeyP')e.preventDefault();return;
+ }
+ if(mapping[e.code]){if(ready)e.preventDefault();keys.add(mapping[e.code]);}
+ if(e.repeat)return;
+ if(e.code==='KeyP'||e.code==='Escape'){e.preventDefault();pause();}
+ if(e.code==='KeyM')sound();if(e.code==='Enter'&&!$('#overlay').hidden)play();
+});
 window.addEventListener('keyup',e=>{if(mapping[e.code])keys.delete(mapping[e.code]);});
 window.addEventListener('blur',()=>{keys.clear();touch.clear();touchControls?.clear();if(game.mode==='playing'&&!paused)pause();});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&game.mode==='playing'&&!paused)pause();});
 canvas.addEventListener('pointerdown',()=>canvas.focus());
 touchControls=installTouchControls({joystick:$('#joystick'),knob:$('#stickKnob'),buttons:document.querySelectorAll('[data-hold]'),onChange:held=>{touch.clear();for(const action of held)touch.add(action);}});
 // A read-only snapshot helps diagnostics without changing gameplay.
-window.martukiState=()=>({...game.snapshot(),build:'0.20.0',campaignComplete,paused,music:music.snapshot(),story:story.snapshot(),dialogue:conversation.snapshot()});
+window.martukiState=()=>({...game.snapshot(),build:'0.21.0',campaignComplete,paused,music:music.snapshot(),sfx:sfx.snapshot(),story:story.snapshot(),dialogue:conversation.snapshot()});
 window.martukiLifecycle=state=>{if(state==='pause'){if(game.mode==='playing'&&!paused)pause();audio.context?.suspend().catch(()=>{});}else if(audio.enabled)audio.start();};
 window.martukiBack=()=>{if(conversation.active){conversation.previous();syncConversationUI();return true;}if(story.active){cancelStory();return true;}if(game.mode==='attract')return false;if(game.mode==='playing'&&!paused)pause();else{keys.clear();touchControls.clear();game.mode='attract';paused=false;showOverlay('start');}return true;};
-function syncMusic(){music.sync(musicScene(game,{story,conversation}),{paused:document.hidden||(paused&&!story.active),enabled:audio.enabled,...musicOptions(story,conversation)});}
+function syncMusic(){sfx.sync({enabled:audio.enabled,paused:document.hidden||(paused&&!story.active)});music.sync(musicScene(game,{story,conversation}),{paused:document.hidden||(paused&&!story.active),enabled:audio.enabled,...musicOptions(story,conversation)});}
 let endTimer=0,lastThunder=-1;
 function loop(t){
  if(ready&&t-lastSave>2000){saveSession();lastSave=t;}
@@ -247,7 +274,7 @@ function loop(t){
  }
 
  if(view){if(game.mode==='attract'){
-  view.splash(sceneTime);const cycle=Math.floor(sceneTime/7.1);if(!story.active&&stormFlash(sceneTime)>.7&&cycle!==lastThunder){lastThunder=cycle;audio.tone(48,1.1,'sawtooth',.028,-15);}
+  view.splash(sceneTime);const cycle=Math.floor(sceneTime/7.1);if(!story.active&&stormFlash(sceneTime)>.7&&cycle!==lastThunder){lastThunder=cycle;audio.effect('thunder');}
  }else view.render(sceneTime,paused,{hideSplash:conversation.active||story.active,quiet:conversation.active||story.active||game.phase==='intro',dialogue:conversation.active,campaignComplete,showResults:shownEnd&&!story.active&&overlayMode==='won'&&!$('#overlay').hidden});}
  if(conversation.active&&view)drawBossConversation(ctx,view.assets,conversation);
  if(storyView&&story.mode==='sequence')storyView.render(story);
@@ -256,6 +283,7 @@ function loop(t){
  $('#touchControls').hidden=hideControls;
  document.documentElement?.classList.toggle('cinematic',story.active||conversation.active||game.mode==='playing'&&['intro','bossdown','playerdown'].includes(game.phase));
  $('#summonBofe').hidden=!game.bofeUnlocked;$('#summonBofe').disabled=game.bofeCooldown>0;
+ if($('#keyboardSummon'))$('#keyboardSummon').hidden=!game.bofeUnlocked;
  updateAbilityButton($('#summonBofe'),game.bofeCooldown,BOFE_COOLDOWN,'Bofe');
  updateAbilityButton($('#specialAbility'),game.player.specialCD,10,'Hoz y martillo');
  syncStoryUI();syncConversationUI();

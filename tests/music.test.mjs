@@ -6,6 +6,32 @@ const root=new URL(process.env.MARTUKI_DIST??'../dist/',import.meta.url);
 const {TRACKS,musicScene}=await import(new URL('music.js',root));
 const {storyMusic}=await import(new URL('music-cues.js',root));
 const {sequencePages}=await import(new URL('story-data.js',root));
+const {Game,OFFICE_BOSS_BEATS}=await import(new URL('core.js',root));
+const {pendingBossConversation}=await import(new URL('boss-dialogue.js',root));
+
+test('Javi keeps boss music from his threat through jacket animation, splash and combat',()=>{
+ const g=new Game();g.reset(3,0);g.spawnStage();
+ assert.equal(musicScene(g),'office');
+ g.introTimer=g.introDuration-OFFICE_BOSS_BEATS.encounter;
+ assert.equal(pendingBossConversation(g).route,'javiEncounter');
+ const pages=sequencePages(['javiEncounter']),index=pages.findIndex(p=>p.sceneId==='07b-ahora-tienes-que-morir');
+ assert.ok(index>=0);
+ for(let i=index;i<pages.length;i++)assert.equal(musicScene(g,{story:{active:true,pages,index:i,page:pages[i]}}),'boss');
+ g.introTimer=g.introDuration-OFFICE_BOSS_BEATS.reveal;
+ for(let i=0;i<50;i++){g.update(.05,{});assert.equal(musicScene(g),'boss','jacket frame '+i);}
+ const saved=JSON.parse(JSON.stringify(g));assert.equal(musicScene(saved),'boss');
+ g.finishOfficeCinematic();assert.equal(musicScene(g),'boss');
+});
+
+test('every boss entrance keeps its narrative cue during the handoff instead of flashing comedy',()=>{
+ const ids=['dimitri','marixas','elisa','mayrena','rost','menina'];
+ const cues=['boss','transformation','boss','transformation','transformation','catastrophe'];
+ for(let level=0;level<6;level++){
+  const g=new Game();g.reset(3,level);g.spawnStage();const boss=g.enemies.find(e=>e.boss);
+  assert.notEqual(musicScene(g),'comedy');boss.conversations=[ids[level]];assert.equal(musicScene(g),cues[level]);
+ }
+ const g=new Game();g.reset(3,2);g.spawnStage();g.enemies[0].transforming=true;assert.equal(musicScene(g),'transformation');
+});
 
 test('all 17 active cues have both real audio formats and the approved title is unchanged',()=>{
  assert.equal(Object.keys(TRACKS).length,17);

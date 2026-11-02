@@ -1,0 +1,38 @@
+Martuki · Diseño de efectos v1 · 2026-11-02
+
+Edición, montaje por capas, recorte, variaciones de velocidad, fundidos y mezcla
+para el juego. Los audios proceden de las siguientes fuentes; no son sonidos
+de combate creados con osciladores. La alarma electrónica es un efecto de
+EZduzziteh editado y limitado en duración.
+
+artisticdude — Swishes Sound Pack y RPG Sound Pack — CC0 1.0
+https://opengameart.org/content/swishes-sound-pack
+https://opengameart.org/content/rpg-sound-pack
+Fuentes: swish-1/2/3/8, cloth-heavy, cloth, metal-small1/2, metal-ringing,
+bottle, bubble, bubble2, wood-small y mnstr4.
+
+StarNinjas — 20 Sword Sound Effects (Attacks and Clashes) — CC0 1.0
+https://opengameart.org/content/20-sword-sound-effects-attacks-and-clashes
+Fuentes: sword.1/2/3. Grabaciones de cuchillos, recortadas y mezcladas para cutter.
+
+Delta12 Studio — RPG Sound Effect Pack — CC0 1.0
+https://opengameart.org/content/rpg-sound-effect-pack
+Fuentes: punch y baseballbat.
+
+trazzz123 — CC0 Deep Monster Roar — CC0 1.0
+https://opengameart.org/content/cc0-deep-monster-roar
+Fuente: monster_roar. Ediciones cortas y capas para rugido, mutación y derrumbe.
+
+EZduzziteh — Alarm — CC0 1.0
+https://opengameart.org/content/alarm-1
+Fuente: alarm_2. Alarma narrativa de 1,5 segundos; no se reproduce en bucle.
+
+Vincent Sevedge (2009), publicado por Tabasco — Gunshot Sounds
+https://opengameart.org/content/gunshot-sounds
+Fuente: sounds/cz.wav, recortada a un disparo corto, mezclada a menor nivel.
+La página indica CC0, pero el archivo creativecommons.txt incluido especifica
+Creative Commons Attribution 3.0 Unported. Conservamos esta atribución y la
+licencia CC BY 3.0 del archivo como condición más estricta.
+https://creativecommons.org/licenses/by/3.0/
+
+CC0 1.0: https://creativecommons.org/publicdomain/zero/1.0/

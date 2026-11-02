@@ -27,3 +27,37 @@
 #webNotice{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:60;width:max-content;max-width:90vw;padding:12px;background:#101c2bf5;color:#f7ebd1;border:1px solid #d2ac6c;font-size:12px;text-align:center}
 .web-help-open .console{visibility:hidden}
 @media(max-height:450px){#webHelpDialog{padding:14px}#webHelpDialog .controls{gap:8px}#webHelpDialog h2{margin-bottom:10px}}
+
+/* Desktop help lives below the canvas, never over enemies or dialogue. */
+#keyboardLegend,.cinematic-key{display:none}
+.web-app:not(.touch-layout):not(.cinematic) .machine{bottom:34px}
+.web-app:not(.touch-layout):not(.cinematic) .screen{width:min(100vw,calc((100dvh - 34px)*16/9));height:min(calc(100dvh - 34px),56.25vw)}
+.web-app:not(.touch-layout):not(.cinematic) #keyboardLegend{position:fixed;inset:auto 0 0;z-index:21;height:34px;display:flex;justify-content:center;align-items:center;gap:clamp(8px,1.5vw,24px);padding:0 8px;background:#080e18;color:#b9c5cf;font:12px/1.2 system-ui,sans-serif;white-space:nowrap;border-top:1px solid #293444}
+#keyboardLegend kbd{font:600 11px/1.2 system-ui,sans-serif;color:#f3dfb6}
+#keyboardLegend button{color:#f3dfb6;background:none;border:0;padding:6px;font:inherit;cursor:pointer}
+#keyboardLegend [hidden]{display:none}
+.web-app:not(.touch-layout) .cinematic-key{display:block;font:600 12px/1.5 system-ui,sans-serif;text-shadow:none;border:1px solid #f3dfb677;border-radius:3px;min-width:20px;margin-top:5px;background:#101c2bb3}
+.web-help-open #keyboardLegend{visibility:hidden}
+#webHelpDialog{width:min(820px,94vw);border-radius:12px;padding:24px 30px;box-shadow:0 24px 90px #000a;font-family:system-ui,sans-serif}
+#webHelpDialog h2{margin:0 0 6px;font-size:22px;color:#f3dfb6}
+#webHelpDialog .keyboard-intro{margin:0 0 18px;color:#bbc9d5}
+.keyboard-diagram{padding:18px 12px 14px;border:1px solid #3d4d60;border-bottom:5px solid #263445;border-radius:12px;background:#0a1320;overflow:hidden}
+.keyboard-row{display:flex;gap:5px;margin:0 0 5px;padding-left:calc(var(--offset)*8.8%)}
+.keyboard-key{width:9%;height:52px;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid #2b394b;border-bottom-width:3px;border-radius:5px;background:#172333;color:#617186}
+.keyboard-key kbd{font:bold 17px/1.2 system-ui,sans-serif}
+.keyboard-key small{font-size:9px;line-height:1.6;min-height:14px}
+.keyboard-key.move{background:#203e51;border-color:#65c7de;color:#ccf5ff}
+.keyboard-key.attack{background:#5a3426;border-color:#e8a666;color:#ffe2bd}
+.keyboard-key.special{background:#423459;border-color:#b39ade;color:#ecdcff}
+.keyboard-key.utility{background:#253442;border-color:#647e92;color:#d0dfeb}
+.keyboard-space{width:49%;margin:9px 0 0 22%;padding:7px;display:flex;justify-content:center;gap:12px;border:1px solid #65c7de;border-bottom-width:3px;border-radius:5px;background:#203e51;color:#ccf5ff;font-size:10px}
+#webHelpDialog .controls{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:16px 0}
+#webHelpDialog .controls>div{align-items:center;gap:6px;font:10px/1.4 system-ui,sans-serif}
+#webHelpDialog .controls .key{font:600 11px/1.5 system-ui,sans-serif;min-width:22px;padding:3px 5px}
+#webHelpDialog .keyboard-cinema{border-top:1px solid #3d4d60;padding-top:12px;margin:12px 0;font-size:15px;color:#f3dfb6}
+.keyboard-cinema span{display:block;font-size:10px;margin-top:7px;color:#bbc9d5}
+#webHelpDialog .keyboard-reopen{font-size:11px;color:#aebdcb;margin:10px 0 16px}
+#webHelpDialog .primary{padding:12px;font:700 13px/1.4 system-ui,sans-serif}
+@media(max-width:900px){#keyboardLegend{gap:8px!important;font-size:10px!important}#keyboardLegend kbd{font-size:10px}}
+@media(max-width:600px){#webHelpDialog{padding:18px}.keyboard-key{height:40px}.keyboard-key small{font-size:6px}.keyboard-key kbd{font-size:13px}.keyboard-row{gap:3px}#webHelpDialog .controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-height:650px) and (min-width:601px){#webHelpDialog{padding:16px 24px}#webHelpDialog .keyboard-intro{margin-bottom:10px}.keyboard-key{height:38px}.keyboard-diagram{padding:10px}.keyboard-key small{font-size:8px}#webHelpDialog .controls{margin:10px 0;gap:6px}#webHelpDialog .keyboard-reopen{margin:6px 0 10px}}
