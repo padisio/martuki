@@ -272,7 +272,8 @@ export const EPILOGUE_PAGES=[
       "names": [
         "Onésimo Amorovich"
       ],
-      "tag": "LÍDER DE LA UNIÓN",
+      "tag": "LÍDER DE LA UNIÓN SOVIÉTICA",
+      "showTag": true,
       "color": "#f5cb6d"
     }
   },

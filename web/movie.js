@@ -1,6 +1,6 @@
-import {buildMovie,movieDuration,readMoviePosition,saveMoviePosition,captureGame} from './movie-data.js?v=1';
+import {buildMovie,movieDuration,readMoviePosition,saveMoviePosition,captureGame,movieChapterTarget} from './movie-data.js?v=chapters-3';
 import {loadVisualAssets,createGameView} from './view-v2.js?v=movie-1';
-import {loadStoryAssets,createStoryView} from './story.js?v=keyboard-1';
+import {loadStoryAssets,createStoryView} from './story.js?v=onesimo-1';
 import {prepareGameAssets} from './asset-loader.js?v=cache-1';
 import {assetFetch} from './asset-cache.js?v=1';
 import {MusicDirector} from './music.js?v=title-josep-1';
@@ -35,6 +35,8 @@ function display(){
  $('movieNarration').textContent=(page.speaker&&page.speaker!=='Narración'?(page.speakerLabel??page.speaker)+': ':'')+(page.screenTitle??page.text??'');
  $('moviePrevious').disabled=index===0;
  $('movieNext').disabled=index===pages.length-1;
+ $('movieChapterPrevious').disabled=movieChapterTarget(pages,index,-1)===null;
+ $('movieChapterNext').disabled=movieChapterTarget(pages,index,1)===null;
  $('moviePosition').textContent=`${index+1} / ${pages.length}`;
  $('movieEnd').hidden=true;persist();syncAudio();soundPage();render();
 }
@@ -49,6 +51,11 @@ function move(direction){
  if(next!==index){index=next;display();}
  else if(direction>0){finished=true;setPlaying(false);$('movieEnd').hidden=false;}
 }
+function moveChapter(direction){
+ if(!ready||!$('movieStart').hidden)return;
+ const next=movieChapterTarget(pages,index,direction);if(next===null)return;
+ unlock();index=next;display();
+}
 function start(fromBeginning=false){if(!ready)return;unlock();if(fromBeginning)index=0;$('movieStart').hidden=true;setPlaying(true);display();}
 function suspend(){if(!ready)return;setPlaying(false);persist();sfx.stop();context?.suspend();}
 document.addEventListener('visibilitychange',()=>{if(document.hidden)suspend();else last=performance.now();});
@@ -59,6 +66,8 @@ $('movieRestart').onclick=()=>start(true);
 $('movieAgain').onclick=()=>start(true);
 $('moviePrevious').onclick=()=>move(-1);
 $('movieNext').onclick=()=>move(1);
+$('movieChapterPrevious').onclick=()=>moveChapter(-1);
+$('movieChapterNext').onclick=()=>moveChapter(1);
 $('moviePause').onclick=()=>{if(!ready)return;unlock();if(finished){start(true);return;}setPlaying(!playing);};
 $('movieSound').onclick=()=>{unlock();muted=!muted;$('movieSound').textContent=muted?'♪':'♫';$('movieSound').setAttribute('aria-label',muted?'Activar sonido':'Silenciar sonido');syncAudio();};
 function fullscreen(){if(document.fullscreenElement)document.exitFullscreen?.();else document.documentElement.requestFullscreen?.().catch(()=>{});}

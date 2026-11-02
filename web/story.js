@@ -1,5 +1,5 @@
 import {drawDialogueCaption,captionLayout,speakerStyle} from './dialogue-style.js?v=quiet-ui-1';
-import {CHAPTERS,ROUTES,STORY_ART,storyAssetPath,sequencePages} from './story-data.js?v=moscow-1';
+import {CHAPTERS,ROUTES,STORY_ART,storyAssetPath,sequencePages} from './story-data.js?v=onesimo-1';
 import {wrapPixelText,pixelText,pixelTextWidth} from './pixel-font.js?v=52';
 import './cinematic-timing.js?v=manual-2';
 
@@ -47,6 +47,7 @@ function drawStorySplash(ctx,page,elapsed=1){
   pixelText(ctx,name,x,y,scale,boss?'#bfc7c7':'#fff0db');
   if(page.state==='cross'||boss){const w=pixelTextWidth(name,scale),t=Math.min(1,elapsed/.3);ctx.strokeStyle='#fa4d46';ctx.lineWidth=boss?2:3;ctx.beginPath();ctx.moveTo(x-w/2-3,y+9);ctx.lineTo(x-w/2-3+(w+6)*t,y+9-7*t);ctx.stroke();}
  });
+ if(cast.showTag&&cast.tag)pixelText(ctx,cast.tag,240,239,1,cast.color);
  if(boss){const scale=pixelTextWidth(finalName,2.5)<=450?2.5:2,t=Math.min(1,elapsed/.2);pixelText(ctx,finalName,240,210+6*(1-t),scale,cast.color);}
 }
 
