@@ -1,0 +1,67 @@
+{
+  "tracks": {
+    "title": {
+      "urls": [
+        "assets/music-title-josep-v1/title.ogg",
+        "assets/music-title-josep-v1/title.mp3"
+      ],
+      "seconds": 102.85715625,
+      "loop": true,
+      "title": "Antes de la misión · Clímax con contramelodía",
+      "bpm": 84,
+      "resume": true
+    },
+    "josep": {
+      "urls": [
+        "assets/music-title-josep-v1/josep.ogg",
+        "assets/music-title-josep-v1/josep.mp3"
+      ],
+      "seconds": 98.5,
+      "loop": true,
+      "loopStart": 36,
+      "loopEnd": 96,
+      "fadeIn": 0.04,
+      "title": "Josep · Dejad su frecuencia abierta",
+      "bpm": 80,
+      "meter": 4,
+      "resume": false
+    }
+  },
+  "sources": [
+    {
+      "id": "title",
+      "file": "title-climax-con-contramelodia.wav",
+      "sha256": "c02dd1d9a1e7d296ee0e5617a6b88513dc8ce55bc5560453a35db5e59a9129eb"
+    },
+    {
+      "id": "josep",
+      "file": "josep-frecuencia-abierta.wav",
+      "sha256": "c91d54bd65933c6bd42584a86155b4c8bd47fd598fbad4ad02a96a2b89762349"
+    }
+  ],
+  "titleMP3UnchangedFromSelectedPreview": true,
+  "josepFirst9595SecondsUnchanged": true,
+  "josepLoopJoinMilliseconds": 50,
+  "files": [
+    {
+      "file": "josep.mp3",
+      "bytes": 2366540,
+      "sha256": "43fac2c44f58fd478b0b0e206e2b10ebd1676d736a060b6fe699bf02d67853ef"
+    },
+    {
+      "file": "josep.ogg",
+      "bytes": 1426364,
+      "sha256": "32622001c56b87bb887382839b5979cda3eac0b5b9b26c94f4b5ce1eaa32107c"
+    },
+    {
+      "file": "title.mp3",
+      "bytes": 2471157,
+      "sha256": "3bda2fb977dc5ba1425fb8e7a57c78676e9d118d847df7fcf97d6e194c00456f"
+    },
+    {
+      "file": "title.ogg",
+      "bytes": 1500468,
+      "sha256": "2539ca85e84974210a6c3bdfbe199db0655d72867a7145e14497a8eff51f5269"
+    }
+  ]
+}

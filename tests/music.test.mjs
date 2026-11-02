@@ -33,14 +33,13 @@ test('every boss entrance keeps its narrative cue during the handoff instead of 
  const g=new Game();g.reset(3,2);g.spawnStage();g.enemies[0].transforming=true;assert.equal(musicScene(g),'transformation');
 });
 
-test('all 17 active cues have both real audio formats and the approved title is unchanged',()=>{
- assert.equal(Object.keys(TRACKS).length,17);
+test('all 18 cues include both formats and the selected title MP3 is unchanged',()=>{
+ assert.equal(Object.keys(TRACKS).length,18);
  for(const [key,t] of Object.entries(TRACKS))for(const url of t.urls){
   assert.ok(fs.statSync(new URL(url,root)).size>5000,key+': '+url);
-  if(key!=='title')assert.match(url,/music-campaign-v[67]\//);
+  if(!['title','josep'].includes(key))assert.match(url,/music-campaign-v[67]\//);
  }
- const expected=['00f9f07000ce6c8038ef0df9b16fa4f923cad6fb81ed8995b74074ec26533123','3c4fd80d04ee95ae7fbd333f21f6e363dec6f26bb738f244417e5da320caa95b'];
- TRACKS.title.urls.forEach((url,i)=>assert.equal(createHash('sha256').update(fs.readFileSync(new URL(url,root))).digest('hex'),expected[i]));
+ assert.equal(createHash('sha256').update(fs.readFileSync(new URL(TRACKS.title.urls[1],root))).digest('hex'),'3bda2fb977dc5ba1425fb8e7a57c78676e9d118d847df7fcf97d6e194c00456f');
  assert.equal(TRACKS.finalBoss.bpm,124);
 });
 
@@ -53,14 +52,15 @@ test('Mayrena, Marixas, the bear and Rosi/David remain threatening after transfo
  assert.equal(storyMusic({pages,index:first-1,page:pages[first-1]}),'radio');
 });
 
-test('giant Menina, regeneration and Josep climax retain danger; helicopter departure has action',()=>{
+test('Menina keeps danger until the fall; Josep music continues into the helicopter',()=>{
  const pages=sequencePages(['rooftopEncounter']),first=pages.findIndex(p=>p.sceneId==='48-crece');assert.ok(first>=0);
  for(let index=first;index<pages.length;index++)assert.equal(storyMusic({pages,index,page:pages[index]}),'catastrophe');
  const after=sequencePages(['rooftopAftermath']);
- after.forEach((page,index)=>assert.equal(storyMusic({pages:after,index,page}),'catastrophe'));
+ const fall=after.findIndex(p=>p.sceneId==='v2-81b-cae-josep');assert.ok(fall>0);
+ after.forEach((page,index)=>assert.equal(storyMusic({pages:after,index,page}),index<fall?'catastrophe':'josep'));
  assert.equal(musicScene({mode:'playing',level:5,stage:3,phase:'fight'}),'finalBoss');
  assert.equal(musicScene({mode:'playing',level:5,stage:3,phase:'bossdown'}),'catastrophe');
- const ep=sequencePages(['epilogue']);assert.equal(storyMusic({pages:ep,index:0,page:ep[0]}),'escape');
+ const ep=sequencePages(['epilogue']);assert.equal(storyMusic({pages:ep,index:0,page:ep[0]}),'josep');
 });
 
 test('level cues are continuous between waves and combat dialogue cannot restore comedy',()=>{

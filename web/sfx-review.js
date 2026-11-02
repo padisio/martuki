@@ -1,5 +1,5 @@
 import {SoundDirector} from './sfx.js?v=2';
-import {MusicDirector} from './music.js?v=transitions-1';
+import {MusicDirector} from './music.js?v=title-josep-1';
 import {assetFetch} from './asset-cache.js?v=1';
 const rows=[
  ['Puñetazo','hit','Tres golpes distintos contra un saco.'],

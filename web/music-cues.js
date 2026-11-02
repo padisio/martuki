@@ -5,7 +5,7 @@ export const SEQUENCE_MUSIC={
  laboratory:'comedy',laboratoryFusion:'transformation',laboratoryAftermath:'comedy',
  sewers:'comedy',sewersEncounter:'comedy',sewersAftermath:'comedy',
  factory:'comedy',factoryEncounter:'comedy',factoryAftermath:'comedy',
- rooftop:'comedy',rooftopEncounter:'comedy',rooftopAftermath:'catastrophe',epilogue:'escape'
+ rooftop:'comedy',rooftopEncounter:'comedy',rooftopAftermath:'catastrophe',epilogue:'josep'
 };
 export const SCENE_MUSIC={
  javiEncounter:{'07b-ahora-tienes-que-morir':'boss'},
@@ -14,6 +14,7 @@ export const SCENE_MUSIC={
  sewersEncounter:{'05a-marta-escucha':'radio','25c-beben-probetas':'transformation'},
  factoryEncounter:{'32a-mano-rosi':'transformation'},
  factoryAftermath:{'44-alarma':'transformation'},
+ rooftopAftermath:{'v2-81b-cae-josep':'josep'},
  rooftopEncounter:{'15-menina':'boss','v2-42-se-adhiere':'transformation','48-crece':'catastrophe'},
  epilogue:{'01-moscu':'russia','33-bordillo-vacio':'epilogue'}
 };

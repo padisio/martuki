@@ -1,13 +1,13 @@
-// v7: danger for boss battles and transformations; title and other cues preserved.
+// Latest title and Josep selections; other campaign tracks preserved.
 export const TRACKS={
   "title": {
     "urls": [
-      "assets/music-campaign-v4/title.ogg",
-      "assets/music-campaign-v4/title.mp3"
+      "assets/music-title-josep-v1/title.ogg",
+      "assets/music-title-josep-v1/title.mp3"
     ],
-    "seconds": 91.42857142857143,
+    "seconds": 102.85715625,
     "loop": true,
-    "title": "Portada · Antes de la misión",
+    "title": "Antes de la misión · Clímax con contramelodía",
     "bpm": 84,
     "resume": true
   },
@@ -202,5 +202,20 @@ export const TRACKS={
       "assets/music-campaign-v7/catastrophe.ogg",
       "assets/music-campaign-v7/catastrophe.mp3"
     ]
+  },
+  "josep": {
+    "urls": [
+      "assets/music-title-josep-v1/josep.ogg",
+      "assets/music-title-josep-v1/josep.mp3"
+    ],
+    "seconds": 98.5,
+    "loop": true,
+    "loopStart": 36,
+    "loopEnd": 96,
+    "fadeIn": 0.04,
+    "title": "Josep · Dejad su frecuencia abierta",
+    "bpm": 80,
+    "meter": 4,
+    "resume": false
   }
 };

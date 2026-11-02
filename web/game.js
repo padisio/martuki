@@ -12,7 +12,7 @@ import {BossConversation,pendingBossConversation,drawBossConversation} from './b
 import {CHAPTERS,SEQUENCES} from './story-data.js?v=moscow-1';
 import {stormFlash} from './scene-animation.js?v=52';
 import {installTouchControls} from './touch-controls.js?v=stick-1';
-import {MusicDirector,musicScene,musicOptions} from './music.js?v=transitions-1';
+import {MusicDirector,musicScene,musicOptions} from './music.js?v=title-josep-1';
 import './access-cue.js?v=52';
 
 const $=s=>document.querySelector(s),canvas=$('#game'),ctx=canvas.getContext('2d',{alpha:false});

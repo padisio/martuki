@@ -1,5 +1,5 @@
-import {TRACKS} from './music-tracks.js?v=campaign-7';
-import {storyMusic} from './music-cues.js?v=campaign-7';
+import {TRACKS} from './music-tracks.js?v=title-josep-1';
+import {storyMusic} from './music-cues.js?v=title-josep-1';
 export {TRACKS};
 const LEVEL_MUSIC=['office','exhibition','laboratory','sewers','factory','rooftop'];
 export function musicOptions(story,conversation){
@@ -90,7 +90,7 @@ export class MusicDirector{
    const offset=track.loop?this.position%duration:this.position;
    this.retire(false,.65);
    const started=c.currentTime;
-   gain.gain.setValueAtTime(0,c.currentTime);gain.gain.linearRampToValueAtTime(1,started+.65);
+   gain.gain.setValueAtTime(0,c.currentTime);gain.gain.linearRampToValueAtTime(1,started+(track.fadeIn??.65));
    source.connect(gain);gain.connect(this.bus);
    const playing={source,gain,scene,started,offset,duration};this.current=playing;
    source.onended=()=>{source.disconnect();gain.disconnect();
@@ -98,7 +98,7 @@ export class MusicDirector{
    };
    source.start(started,offset);this.failed.delete(scene);
    // Predict just one next cue; the decoded cache contains at most three.
-   const next=scene==='title'?'intro':scene==='rooftop'?'finalBoss':
+   const next=scene==='catastrophe'?'josep':scene==='josep'?'russia':scene==='title'?'intro':scene==='rooftop'?'finalBoss':
     scene==='radio'||scene==='comedy'?'transformation':LEVEL_MUSIC.includes(scene)?'boss':
     scene==='finalBoss'?'catastrophe':scene==='transformation'?'boss':null;
    if(next&&revision===this.revision)this.load(next).catch(()=>{});

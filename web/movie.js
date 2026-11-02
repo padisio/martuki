@@ -3,8 +3,8 @@ import {loadVisualAssets,createGameView} from './view-v2.js?v=movie-1';
 import {loadStoryAssets,createStoryView} from './story.js?v=keyboard-1';
 import {prepareGameAssets} from './asset-loader.js?v=cache-1';
 import {assetFetch} from './asset-cache.js?v=1';
-import {MusicDirector} from './music.js?v=transitions-1';
-import {storyMusic} from './music-cues.js?v=campaign-7';
+import {MusicDirector} from './music.js?v=title-josep-1';
+import {storyMusic} from './music-cues.js?v=title-josep-1';
 import {SoundDirector,storyEffect} from './sfx.js?v=2';
 
 const $=id=>document.getElementById(id),pages=buildMovie(),canvas=$('movieCanvas'),ctx=canvas.getContext('2d',{alpha:false});

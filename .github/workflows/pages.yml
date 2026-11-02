@@ -34,7 +34,7 @@ jobs:
       - name: Comprobar interfaz, personajes y música narrativa
         env:
           MARTUKI_DIST: ../site/dist/
-        run: node --test tests/quiet-ui.test.mjs tests/continuity.test.mjs tests/touch.test.mjs tests/combat-feel.test.mjs tests/music.test.mjs tests/keyboard.test.mjs tests/sfx.test.mjs tests/movie.test.mjs
+        run: node --test tests/quiet-ui.test.mjs tests/continuity.test.mjs tests/touch.test.mjs tests/combat-feel.test.mjs tests/music.test.mjs tests/keyboard.test.mjs tests/sfx.test.mjs tests/movie.test.mjs tests/title-josep.test.mjs
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
